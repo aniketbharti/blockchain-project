@@ -1,0 +1,16 @@
+<form>
+    <div class="example-full-width">
+        <div class="input-group input-group mb-3">
+            <input type="text" class="form-control" aria-label="Small" [formControl]="myControl"
+                [matAutocomplete]="auto">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-sm">Small</span>
+            </div>
+        </div>
+        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                {{option}}
+            </mat-option>
+        </mat-autocomplete>
+    </div>
+</form>

@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "blockchain-project-b284e": {
+      "hosting": {
+        "blockchain-ui": [
+          "blockchain-project-b284e"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "blockchain-project-b284e"
+  }
+}

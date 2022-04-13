@@ -1,1 +1,40 @@
 /* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+  height: 100% !important;
+  width: 100% !important;
+}
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+/* Importing Bootstrap SCSS file. */
+@import '~bootstrap/scss/bootstrap';
+
+.carousel-inner .sr-only {
+  display: none;
+}
+
+.carousel-control-next .sr-only {
+  display: none;
+}
+
+.carousel-control-prev .sr-only {
+  display: none;
+}
+
+.container {
+  margin-top: 40px;
+}
+
+.mat-dialog-container{
+  padding: 0px !important;
+}
+
+
+.text-error{
+  font-size: 10px; 
+  padding: 2px;
+}

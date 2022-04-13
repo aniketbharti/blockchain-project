@@ -1,0 +1,14 @@
+<div class="container-class">
+    <div class="text-center d-flex flex-wrap">
+        <ng-container *ngFor="let message of data.message; let i= index;">
+            <h5 *ngIf="i==0; else othermsg">{{message}}</h5>
+            <ng-template #othermsg>
+                <p>{{message}}<br></p>
+            </ng-template>
+        </ng-container>
+        <div class="w-100 mt-3">
+            <button class="commonBtn commonBtnTable m-1" (click)="modalDismiss(button)"
+                *ngFor="let button of data.button">{{button}}</button>
+        </div>
+    </div>
+</div>
