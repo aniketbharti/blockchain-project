@@ -5,9 +5,9 @@
                 [matAutocomplete]="auto">
         </div>
         <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-            <mat-option *ngFor="let option of filteredOptions | async" [value]="option" [routerLink]="['/search']"
-                [queryParams]="{search: option}">
-                {{option}}
+            <mat-option *ngFor="let option of filteredOptions | async" [value]="option[1]" [routerLink]="['/search']"
+                [queryParams]="{search: option[1], field: option[0] }">
+                {{option[1]}}
             </mat-option>
         </mat-autocomplete>
     </div>

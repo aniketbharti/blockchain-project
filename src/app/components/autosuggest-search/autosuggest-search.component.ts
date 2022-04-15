@@ -12,7 +12,7 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 
 export class AutosuggestSearchComponent implements OnInit {
   myControl = new FormControl();
-  options: string[] = [];
+  options: any[] = [];
   filteredOptions: Observable<string[]> | undefined;
 
   constructor(private fireBaseService: FirebaseService) { }
@@ -24,9 +24,9 @@ export class AutosuggestSearchComponent implements OnInit {
         return docs.data()
       })
       data.forEach((ele) => {
-        this.options.push(ele.product_category)
-        this.options.push(ele.product_subcategory)
-        this.options.push(ele.product_title)
+        this.options.push(["product_category", ele.product_category])
+        this.options.push(["product_subcategory", ele.product_subcategory])
+        this.options.push(["product_title", ele.product_title])
       })
       const val = new Set(this.options)
       this.options = Array.from(val)
@@ -39,7 +39,7 @@ export class AutosuggestSearchComponent implements OnInit {
 
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
-    return this.options.filter(option => option.toLowerCase().includes(filterValue));
+    return this.options.filter(option => option[1].toLowerCase().includes(filterValue));
   }
 
 

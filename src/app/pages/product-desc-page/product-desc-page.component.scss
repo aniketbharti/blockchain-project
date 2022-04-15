@@ -77,7 +77,7 @@ img {
   font-weight: 400;
 }
 .last-price span {
-  color: #f64749;
+  color: #6b6;
   text-decoration: line-through;
 }
 .new-price span {
@@ -100,7 +100,7 @@ img {
 .product-detail ul li {
   margin: 0;
   list-style: none;
-  background: url(https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/checked.png)
+  background: url(https://e7.pngegg.com/pngimages/670/996/png-clipart-check-mark-tick-green-nrg-co-angle-leaf-thumbnail.png)
     left center no-repeat;
   background-size: 18px;
   padding-left: 1.7rem;
@@ -135,7 +135,7 @@ img {
   background: #256eff;
 }
 .purchase-info .btn:last-of-type {
-  background: #f64749;
+  background: #6b6;
 }
 .purchase-info .btn:hover {
   opacity: 0.9;
@@ -161,4 +161,12 @@ img {
   .product-content {
     padding-top: 0;
   }
+}
+
+.padding-data{
+  margin: 2px !important;
+}
+
+.margin-class{
+  margin: 5px;
 }

@@ -28,7 +28,6 @@ export class ProductCorouselComponent implements OnInit {
           this.result = this.partition(this.courouselData?.data, 3)
         }
       }
-      console.log(this.result)
     });
 
   }

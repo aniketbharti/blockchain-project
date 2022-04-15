@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { addDoc, query, where, Firestore, collection, getDocs, doc, updateDoc, deleteDoc } from '@angular/fire/firestore'
+import { addDoc, query, where, Firestore, collection, getDocs, doc, updateDoc, deleteDoc, documentId } from '@angular/fire/firestore'
 import { from, Observable } from 'rxjs';
-import { getDownloadURL, ref, Storage, uploadBytes, } from '@angular/fire/storage';
+import { getDownloadURL, ref, Storage, uploadBytes } from '@angular/fire/storage';
 @Injectable({
   providedIn: 'root'
 })
@@ -39,35 +39,49 @@ export class FirebaseService {
     return from(getDocs(this.productCollection))
   }
 
-
-  getData() {
-    return getDocs(this.userCollection)
+  searchProductOnCondition(field: string, value: string) {
+    const q = query(this.productCollection, where(field, "==", value));
+    return from(getDocs(q))
   }
 
-  updateData(id: string) {
-    const dataToUpdate = doc(this.firestore, 'users', id);
-    updateDoc(dataToUpdate, {
-      name: 'Nishant',
-      email: 'Nishant123@gmail.com'
-    })
-      .then(() => {
-        alert('Data updated');
-        this.getData()
-      })
-      .catch((err) => {
-        alert(err.message)
-      })
+  searchSpecificProduct(id: string) {
+    const q = query(this.productCollection, where(documentId(), '==', id))
+    return from(getDocs(q))
   }
 
-  deleteData(id: string) {
-    const dataToDelete = doc(this.firestore, 'users', id);
-    deleteDoc(dataToDelete)
-      .then(() => {
-        alert('Data Deleted');
-        this.getData()
-      })
-      .catch((err) => {
-        alert(err.message)
-      })
+  similarProduct(field: string) {
+    const q = query(this.productCollection, where("product_subcategory", '==', field))
+    return from(getDocs(q))
   }
+
+  // getData() {
+  //   return getDocs(this.userCollection)
+  // }
+
+  // updateData(id: string) {
+  //   const dataToUpdate = doc(this.firestore, 'users', id);
+  //   updateDoc(dataToUpdate, {
+  //     name: 'Nishant',
+  //     email: 'Nishant123@gmail.com'
+  //   })
+  //     .then(() => {
+  //       alert('Data updated');
+  //       this.getData()
+  //     })
+  //     .catch((err) => {
+  //       alert(err.message)
+  //     })
+  // }
+
+  // deleteData(id: string) {
+  //   const dataToDelete = doc(this.firestore, 'users', id);
+  //   deleteDoc(dataToDelete)
+  //     .then(() => {
+  //       alert('Data Deleted');
+  //       this.getData()
+  //     })
+  //     .catch((err) => {
+  //       alert(err.message)
+  //     })
+  // }
 }

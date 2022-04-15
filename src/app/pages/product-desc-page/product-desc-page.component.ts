@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { FirebaseService } from 'src/app/services/firebase.service';
 
 @Component({
   selector: 'app-product-desc-page',
@@ -6,24 +8,45 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./product-desc-page.component.scss']
 })
 export class ProductDescPageComponent implements OnInit {
-  images = [944, 1011, 984, 222, 444].map((n) => `https://picsum.photos/id/${n}/900/500`);
 
-  imgSlides = [
-    "assets/images/shoes.jpg",
-    "assets/images/shoes_2.jpg",
-    "assets/images/shoes.jpg",
-    "assets/images/shoes_2.jpg"
-  ];
-  similarProduct = {
+  similarProduct: { heading: string, data: any[] } = {
     heading: "Similar Products",
-    data: this.imgSlides
+    data: []
   }
-  image = {
-    data: this.images
+  results: any[] = [];
+  images: any[] = [];
+  constructor(private firebaseService: FirebaseService, private activatedRoute: ActivatedRoute) {
+
   }
-  constructor() { }
 
   ngOnInit(): void {
+    this.activatedRoute.queryParams.subscribe((res) => {
+      const id = res["id"]
+      this.similarProduct.data = []
+      this.images = []
+      this.firebaseService.searchSpecificProduct(id).subscribe(res => {
+        this.results = res.docs.map((docs: any) => {
+          return { id: docs.id, ...docs.data() }
+        })
+        this.images = this.results[0].imagePaths
+        this.getSimilarProduct(this.results[0].product_subcategory)
+      })
+
+    })
+  }
+
+  getSimilarProduct(data: string) {
+    this.firebaseService.similarProduct(data).subscribe((res) => {
+      const results = res.docs.map((docs: any) => {
+        return { id: docs.id, ...docs.data() }
+      })
+      this.similarProduct.data = results
+      console.log(this.similarProduct)
+    })
+  }
+
+  getResponse(data: string) {
+    return data.split("-")
   }
 
 }

@@ -1,45 +1,47 @@
+<div class="heading-class">
+    <h2>Product Details</h2>
+</div>
 <div class="container">
     <div class="row card-wrapper">
-        <div class="col-md-4">
+        <div class="col-md-4" *ngIf="images.length > 0">
             <app-multi-image-corousel [courouselData]="images"></app-multi-image-corousel>
         </div>
-        <div class="col-md-8">
+        <div class="col-md-8" *ngIf="results.length > 0">
             <div class="product-content">
-                <h2 class="product-title">Nike shoes</h2>
-                <a href="#" class="product-link">Visit nike store</a>
+                <h2 class="product-title">{{results[0]?.product_title}}</h2>
                 <div class="product-price">
-                    <p class="last-price">Old Price: <span>$257.00</span></p>
-                    <p class="new-price">New Price: <span>$249.00 (5%)</span></p>
+                    <h4 class="new-price"><span>Price : {{results[0].price}} WEI</span></h4>
                 </div>
                 <div class="product-detail">
-                    <h2>about this item:</h2>
-                    <p>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo eveniet
-                        veniam tempora fuga tenetur placeat sapiente architecto illum soluta
-                        consequuntur, aspernatur quidem at sequi ipsa!
+                    <h2><i>About This Item:</i></h2>
+                    <p *ngFor="let i of getResponse(results[0].product_desc)" class="padding-data">
+                        {{i}}
                     </p>
-                    <p>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur,
-                        perferendis eius. Dignissimos, labore suscipit. Unde.
-                    </p>
-                    <ul>
-                        <li>Color: <span>Black</span></li>
-                        <li>Available: <span>in stock</span></li>
-                        <li>Category: <span>Shoes</span></li>
-                        <li>Shipping Area: <span>All over the world</span></li>
-                        <li>Shipping Fee: <span>Free</span></li>
+                    <ul *ngFor="let res of results[0].features">
+                        <li>{{res.name}}: <span>{{res.value}}</span></li>
                     </ul>
                 </div>
                 <div class="purchase-info">
-                    <input type="number" min="0" value="1" />
-                    <button type="button" class="btn">
-                        Add to Cart <i class="fas fa-shopping-cart"></i>
-                    </button>
+                    <div style="display: flex; flex-wrap: wrap;">
+                        <div class="margin-class">
+                            <input type="number" min="0" value="1" value="1" disabled />
+                        </div>
+                        <div class="margin-class">
+                            <button type="button" class="btn">
+                                Add to Cart <i class="fas fa-shopping-cart"></i>
+                            </button>
+                        </div>
+                        <div class="margin-class">
+                            <button type="button" class="btn">
+                                Book with Token Amount <i class="fas fa-shopping-cart"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row">
+    <div class="row" *ngIf="similarProduct.data.length > 0">
         <app-product-corousel [courouselData]="similarProduct"></app-product-corousel>
     </div>
 </div>

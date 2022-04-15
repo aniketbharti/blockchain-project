@@ -15,7 +15,6 @@ export class MultiImageCorouselComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-
     if (this.courouselData) {
       this.displayImage = this.courouselData[0]
       this.result = this.partition(this.courouselData, 4)
