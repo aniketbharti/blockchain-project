@@ -1,11 +1,12 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
     <a class="navbar-brand">Navbar</a>
-    <form class="form-width">
-      <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-    </form>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02"
-      aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+    <div class="width-class">
+      <app-autosuggest-search></app-autosuggest-search>
+    </div>
+    <button class="navbar-toggler" [ngClass]="{'collapsed': toggleCollapseNavBar ==  false }" type="button"
+      data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false"
+      aria-label="Toggle navigation" (click)="toggleCollapseNavBar = !toggleCollapseNavBar">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
@@ -17,7 +18,8 @@
           <a class="nav-link" (click)="login()">Login</a>
         </li>
         <li class="nav-item dropdown" *ngIf="isLogin">
-          <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
             Manage Account
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">

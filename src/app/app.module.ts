@@ -28,6 +28,8 @@ import { environment } from '../environments/environment';
 import { provideFirestore,getFirestore } from '@angular/fire/firestore';
 import { RegisterModalComponent } from './components/register-modal/register-modal.component';
 import { MessageModalComponent } from './components/modal/message.modal.component';
+import { PostProductComponent } from './pages/post-product/post-product.component';
+import { getStorage, provideStorage } from '@angular/fire/storage';
 
 @NgModule({
   declarations: [
@@ -44,7 +46,8 @@ import { MessageModalComponent } from './components/modal/message.modal.componen
     MultiImageCorouselComponent,
     CartPageComponent,
     RegisterModalComponent,
-    MessageModalComponent
+    MessageModalComponent,
+    PostProductComponent
   ],
   imports: [
     BrowserModule,
@@ -60,7 +63,8 @@ import { MessageModalComponent } from './components/modal/message.modal.componen
     MatListModule,
     NgbModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
-    provideFirestore(() => getFirestore())
+    provideFirestore(() => getFirestore()),
+    provideStorage(() => getStorage()),
   ],
   providers: [],
   bootstrap: [AppComponent]

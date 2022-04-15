@@ -29,12 +29,24 @@ body {
   margin-top: 40px;
 }
 
-.mat-dialog-container{
+.mat-dialog-container {
   padding: 0px !important;
 }
 
-
-.text-error{
-  font-size: 10px; 
+.text-error {
+  font-size: 10px;
   padding: 2px;
+}
+
+.heading-class {
+  height: 100px;
+  background-color: #6b6;
+  color: #fff;
+  font-style: italic;
+  padding: 20px;
+}
+
+label {
+  padding-bottom: 5px;
+  padding-top: 5px;
 }

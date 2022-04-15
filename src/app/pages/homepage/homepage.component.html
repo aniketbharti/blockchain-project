@@ -1,27 +1,27 @@
 <app-main-cousel></app-main-cousel>
 <div class="container">
     <div class="product-categories">
-        <div class="content">
+        <div class="content" [routerLink]="['/search']" [queryParams]="{search: 'Electronics'}">
             <img class="icon-class" src="assets/icons/electronics.png">
             <p>Electronics</p>
         </div>
-        <div class="content">
+        <div class="content" [routerLink]="['/search']" [queryParams]="{search: 'Applicances'}">
             <img class="icon-class" src="assets/icons/appliances.png">
             <p>Applicances</p>
         </div>
-        <div class="content">
+        <div class="content" [routerLink]="['/search']" [queryParams]="{search: 'Fashion'}">
             <img class="icon-class" src="assets/icons/fashion.png">
             <p>Fashion</p>
         </div>
-        <div class="content">
+        <div class="content" [routerLink]="['/search']" [queryParams]="{search: 'Beauty & Grooming'}">
             <img class="icon-class" src="assets/icons/beauty.png">
             <span>Beauty & <br> Grooming</span>
         </div>
-        <div class="content">
+        <div class="content" [routerLink]="['/search']" [queryParams]="{search: 'Furniture'}">
             <img class="icon-class" src="assets/icons/furniture.png">
             <p>Furniture</p>
         </div>
-        <div class="content">
+        <div class="content" [routerLink]="['/search']" [queryParams]="{search: 'Home Decor'}">
             <img class="icon-class" src="assets/icons/decor.png">
             <p>Home Decor</p>
         </div>

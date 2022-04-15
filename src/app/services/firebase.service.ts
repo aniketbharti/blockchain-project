@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
 import { addDoc, query, where, Firestore, collection, getDocs, doc, updateDoc, deleteDoc } from '@angular/fire/firestore'
 import { from, Observable } from 'rxjs';
-
+import { getDownloadURL, ref, Storage, uploadBytes, } from '@angular/fire/storage';
 @Injectable({
   providedIn: 'root'
 })
 export class FirebaseService {
   userCollection: any;
-
-  constructor(public firestore: Firestore) {
+  productCollection: any
+  constructor(public firestore: Firestore, private storage: Storage) {
     this.userCollection = collection(this.firestore, 'users')
+    this.productCollection = collection(this.firestore, 'product')
   }
 
   checkUserExists(accountNumbe: number): Observable<any> {
@@ -17,22 +18,27 @@ export class FirebaseService {
     return from(getDocs(q))
   }
 
-  registerNewUser(data: any) {
-    return from(addDoc(this.userCollection, data)
-    )
+  addProduct(data: any) {
+    return from(addDoc(this.productCollection, data))
   }
 
 
+  uploadImage(image: File[], path: string, userid: string): Observable<string[]> {
+    const promises = image.map((file, index) => {
+      const storageRef = ref(this.storage, `${path}/${userid}_${file.name}`);
+      return uploadBytes(storageRef, file).then((result) => getDownloadURL(result.ref))
+    })
+    return from(Promise.all(promises))
+  }
 
-  // addData(value: any) {
-  //   addDoc(this.userCollection, value)
-  //     .then(() => {
-  //       alert('Data Sent')
-  //     })
-  //     .catch((err) => {
-  //       alert(err.message)
-  //     })
-  // }
+  registerNewUser(data: any) {
+    return from(addDoc(this.userCollection, data))
+  }
+
+  searchProduct() {
+    return from(getDocs(this.productCollection))
+  }
+
 
   getData() {
     return getDocs(this.userCollection)

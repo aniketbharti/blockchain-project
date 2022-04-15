@@ -13,6 +13,7 @@ import { RegisterModalComponent } from '../register-modal/register-modal.compone
 export class HeaderNavComponent implements OnInit {
 
   isLogin: boolean = false;
+  toggleCollapseNavBar = false;
 
   constructor(private dataService: DataService, private etheriumService: EtheriumService, private firebaseService: FirebaseService, private dialog: MatDialog) { }
 
@@ -22,14 +23,16 @@ export class HeaderNavComponent implements OnInit {
         this.isLogin = true
       }
     })
-
   }
 
   async login() {
     const etherdata = await this.etheriumService.connectMetaMask();
     const docSnap = this.firebaseService.checkUserExists(etherdata[0])
     docSnap.subscribe(res => {
-      const data = res.docs.map((docs: any) => docs.data())
+      const data = res.docs.map((docs: any) => {
+        return { id: docs.id, ...docs.data() }
+      })
+      console.log(data)
       if (data.length == 0) {
         const dialogRef = this.dialog.open(RegisterModalComponent, {
           data: { account: etherdata[0] },

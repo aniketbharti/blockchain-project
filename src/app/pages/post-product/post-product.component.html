@@ -1,0 +1,223 @@
+<div class="heading-class">
+    <h2>Post Product Details</h2>
+</div>
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            Featured
+        </div>
+        <div class="card-body">
+            <form class="needs-validation" [formGroup]="postForm">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label for="validationCustom01">Product Title<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="validationCustom01" placeholder="Product Title"
+                            formControlName="product_title">
+                        <div *ngIf="!f.product_title?.valid && (f.product_title?.dirty ||f.product_title?.touched)">
+                            <div [hidden]="!f.product_title.errors?.required" class="text-error text-danger">
+                                Product Title is required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="validationCustom02">Category<span class="text-danger">*</span></label>
+                        <select class="form-control" id="exampleFormControlSelect1" formControlName="product_category">
+                            <option value="Electronics">Electronics</option>
+                            <option value="Applicances">Applicances</option>
+                            <option value="Fashion">Fashion</option>
+                            <option value="Beauty and Grooming">Beauty and Grooming</option>
+                            <option value="Home Decor">Home Decor</option>
+                        </select>
+                        <div
+                            *ngIf="!f.product_category?.valid && (f.product_category?.dirty ||f.product_category?.touched)">
+                            <div [hidden]="!f.product_category.errors?.required" class="text-error text-danger">
+                                Product Category is required
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="validationCustomUsername">Sub Category<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="validationCustomUsername" placeholder="Sub Category"
+                            aria-describedby="inputGroupPrepend" formControlName="product_subcategory">
+                        <div
+                            *ngIf="!f.product_subcategory?.valid && (f.product_subcategory?.dirty ||f.product_subcategory?.touched)">
+                            <div [hidden]="!f.product_subcategory.errors?.required" class="text-error text-danger">
+                                Product Sub Category is required
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label for="validationCustom03">Product Description<span class="text-danger">*</span></label>
+                        <textarea rows="5" class="form-control" formControlName="product_desc"></textarea>
+                        <div *ngIf="!f.product_desc?.valid && (f.product_desc?.dirty ||f.product_desc?.touched)">
+                            <div [hidden]="!f.product_desc.errors?.required" class="text-error text-danger">
+                                Product Description is required
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label for="validationCustom03">Quantity<span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" formControlName="product_quantity"
+                            id="validationCustom03" placeholder="Quantity">
+                        <div
+                            *ngIf="!f.product_quantity?.valid && (f.product_quantity?.dirty ||f.product_quantity?.touched)">
+                            <div [hidden]="!f.product_quantity.errors?.required" class="text-error text-danger">
+                                Quantity is required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="validationCustom04">Price Per Item<span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" id="validationCustom04"
+                            placeholder="Enter Price in Wei" formControlName="price">
+                        <div *ngIf="!f.price?.valid && (f.price?.dirty ||f.price?.touched)">
+                            <div [hidden]="!f.price.errors?.required" class="text-error text-danger">
+                                Price is required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="validationCustom05">Partial Payment <span class="text-danger">*</span></label><br>
+                        <input class="form-check-input" style="margin: 5px" formControlName="partial_payment"
+                            type="radio" id="flexRadioDefault1" value="yes">
+                        <label class="form-check-label" for="flexRadioDefault1"> Yes</label>
+                        <input class="form-check-input" style="margin: 5px" type="radio" id="flexRadioDefault2"
+                            formControlName="partial_payment" value="no">
+                        <label class="form-check-label" for="flexRadioDefault2">No</label>
+                        <div
+                            *ngIf="!f.partial_payment?.valid && (f.partial_payment?.dirty ||f.partial_payment?.touched)">
+                            <div [hidden]="!f.partial_payment.errors?.required" class="text-error text-danger">
+                                Partial Payment Selection is required
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="form-check-label" for="flexRadioDefault1"> Add Features</label>
+                    <div formArrayName="features">
+                        <div *ngFor="let feature of features.controls; let i=index">
+                            <div [formGroupName]="i" class="row mb-3">
+                                <div class="col-md-5">
+                                    <input type="text" class="form-control" formControlName="name"
+                                        placeholder="Feature Name">
+                                    <div
+                                        *ngIf="!feature.get('name')?.valid && (feature.get('name')?.dirty ||feature.get('name')?.touched)">
+                                        <div [hidden]="!feature.get('name')?.errors?.required"
+                                            class="text-error text-danger">
+                                            Feature Name is required
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-5">
+                                    <input type="text" formControlName="value" class="form-control"
+                                        placeholder="Feature Value">
+                                    <div
+                                        *ngIf="!feature.get('value')?.valid && (feature.get('value')?.dirty ||feature.get('value')?.touched)">
+                                        <div [hidden]="!feature.get('value')?.errors?.required"
+                                            class="text-error text-danger">
+                                            Feature Value is required
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <button mat-icon-button (click)="removeSkill(i)">
+                                        <mat-icon mat-list-icon>close</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content:flex-end">
+                        <button mat-icon-button (click)="addToArrayFeatures()">
+                            <mat-icon mat-list-icon>add</mat-icon>
+                            Add
+                        </button>
+                        <div class="col-2"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label for="validationCustom02">Condition<span class="text-danger">*</span></label>
+                        <select class="form-control" id="exampleFormControlSelect1" formControlName="condition">
+                            <option value="New">New</option>
+                            <option value="Used">Used</option>
+                            <option value="Refurbished">Refurbished</option>
+                        </select>
+                        <div *ngIf="!f.condition?.valid && (f.condition?.dirty ||f.condition?.touched)">
+                            <div [hidden]="!f.condition.errors?.required" class="text-error text-danger">
+                                Condition is required
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label for="validationCustom03">Free Shipping<span class="text-danger">*</span></label><br>
+                        <input class="form-check-input" style="margin: 5px" type="radio" id="flexRadioDefault3"
+                            formControlName="free_shipping" value="yes">
+                        <label class="form-check-label" for="flexRadioDefault3"> Yes</label>
+                        <input class="form-check-input" style="margin: 5px" type="radio" id="flexRadioDefault4"
+                            formControlName="free_shipping" value="no">
+                        <label class="form-check-label" for="flexRadioDefault4">No</label>
+                        <div *ngIf="!f.free_shipping?.valid && (f.free_shipping?.dirty ||f.free_shipping?.touched)">
+                            <div [hidden]="!f.free_shipping.errors?.required" class="text-error text-danger">
+                                Free Shipping Selection is required
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="validationCustom04">Shipping Charges<span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" id="validationCustom04" placeholder="Shipping Charges"
+                            formControlName="shipping_charges">
+                        <div
+                            *ngIf="!f.shipping_charges?.valid && (f.shipping_charges?.dirty ||f.shipping_charges?.touched)">
+                            <div [hidden]="!f.shipping_charges.errors?.required" class="text-error text-danger">
+                                Shipping Charges is required
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2">
+                        <p><label for="file" style="cursor: pointer;">Upload Images<span
+                                    class="text-danger">*</span></label></p>
+                    </div>
+                    <div class="col-md-4">
+                        <p><input type="file" accept="image/*" name="image" id="file" (change)="uploadFiles($event)"
+                                style="display: none;" multiple></p>
+                    </div>
+                    <div class="col-md-6">
+                        <div *ngFor="let data of selectedFiles; let i = index">
+                            <p>{{data.name}} <span (click)="removeFile(i)">x</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="invalidCheck" formControlName="accepttc"
+                            value="true">
+                        <label class="form-check-label" for="invalidCheck">
+                            Agree to terms and conditions
+                        </label>
+                        <div *ngIf="!f.accepttc?.valid && (f.accepttc?.dirty ||f.accepttc?.touched)">
+                            <div [hidden]="!f.accepttc.errors?.required" class="text-error text-danger">
+                                You Must Agree before submiting
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-primary mt-3" (click)="onSubmit()">Submit form</button>
+            </form>
+        </div>
+    </div>
+</div>
