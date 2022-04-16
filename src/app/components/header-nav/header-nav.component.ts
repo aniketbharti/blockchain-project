@@ -18,7 +18,7 @@ export class HeaderNavComponent implements OnInit {
   toggleCollapseNavBar = false;
   userData: any;
 
-  constructor(private snackBar: MatSnackBar, private dataService: DataService, private etheriumService: EtheriumService, private firebaseService: FirebaseService, private dialog: MatDialog) { }
+  constructor(private snackBar: MatSnackBar, private etheriumService: EtheriumService, private dataService: DataService, private firebaseService: FirebaseService, private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.dataService.getUserData().subscribe((res: any) => {
@@ -36,25 +36,26 @@ export class HeaderNavComponent implements OnInit {
       const data = res.docs.map((docs: any) => {
         return { id: docs.id, ...docs.data() }
       })
-      console.log(data)
       if (data.length == 0) {
         const dialogRef = this.dialog.open(RegisterModalComponent, {
           data: { account: etherdata[0] },
           width: '600px',
           height: '540px',
         });
-        dialogRef.afterClosed().subscribe(result => {
+        dialogRef.afterClosed().subscribe(async (result) => {
           if (result?.event == "register") {
-            this.firebaseService.registerNewUser(result.data).subscribe((res: any) => {
+            this.etheriumService.registerUser(etherdata[0]).then((res) => {
               console.log(res)
-              this.firebaseService.checkUserExists(this.userData[0].user_wallet).subscribe((res) => {
-                this.userData = res.docs.map((docs: any) => {
-                  return { id: docs.id, ...docs.data() }
+              this.firebaseService.registerNewUser(result.data).subscribe((res: any) => {
+                this.firebaseService.checkUserExists(etherdata[0]).subscribe((res) => {
+                  this.userData = res.docs.map((docs: any) => {
+                    return { id: docs.id, ...docs.data() }
+                  })
+                  this.dataService.setUserData(this.userData)
                 })
-                this.dataService.setUserData(data)
+              }, (err: any) => {
+                console.log(err)
               })
-            }, (err: any) => {
-              console.log(err)
             })
           }
         });
@@ -82,7 +83,6 @@ export class HeaderNavComponent implements OnInit {
             this.dataService.setUserData([results])
             this.snackBarMessage("Successfully Register as Seller", "Ok")
           })
-
         })
       }
     })
