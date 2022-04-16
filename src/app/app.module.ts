@@ -32,6 +32,7 @@ import { PostProductComponent } from './pages/post-product/post-product.componen
 import { getStorage, provideStorage } from '@angular/fire/storage';
 import { CartItemsComponent } from './components/cart-items/cart-items.component';
 import { ShippingPageComponent } from './pages/shipping-page/shipping-page.component';
+import { ReviewCartComponent } from './pages/review-cart/review-cart.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { ShippingPageComponent } from './pages/shipping-page/shipping-page.compo
     MessageModalComponent,
     PostProductComponent,
     CartItemsComponent,
-    ShippingPageComponent
+    ShippingPageComponent,
+    ReviewCartComponent
   ],
   imports: [
     BrowserModule,

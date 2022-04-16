@@ -7,7 +7,7 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 })
 export class CartItemsComponent implements OnInit {
 
-  @Input() item: any[] = []
+  @Input() item: { removeButtonDisplay: boolean, data: any[] } = { removeButtonDisplay: true, data: [] }
   @Output() eventEmitterData: EventEmitter<number> = new EventEmitter();
 
   constructor() {

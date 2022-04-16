@@ -1,15 +1,24 @@
 <div class="heading-class">
-    <h2>Shopping Cart</h2>
+    <h2>Review Cart</h2>
 </div>
 <div class="container">
     <div class="shopping-cart">
         <div class="row">
             <div class="col-md-8">
-                <app-cart-items *ngIf="cartItems.data.length > 0" [item]="cartItems" (eventEmitterData)="removeItem($event)">
+                <app-cart-items *ngIf="cartItems.data.length > 0" [item]="cartItems">
                 </app-cart-items>
             </div>
             <div class="col-md-1"></div>
             <div class="col-md-3 ">
+                <div class="totals card card-class">
+                    <p class="margin-class">{{address?.name}}</p>
+                    <p class="margin-class">{{address?.addr1}}</p>
+                    <p class="margin-class">{{address?.addr2}}</p>
+                    <p class="margin-class">{{address?.city}}</p>
+                    <p class="margin-class">{{address?.state}}</p>
+                    <p class="margin-class">{{address?.zip}}</p>
+                    <p class="margin-class">{{address?.country}}</p>
+                </div>
                 <div class="totals card card-class">
                     <div class="totals-item">
                         <label>Subtotal Product</label>
@@ -23,7 +32,7 @@
                         <label>Grand Total</label>
                         <div class="totals-value" id="cart-total">{{totalPrice}} WEI</div>
                     </div>
-                    <button class="checkout" [routerLink]="['/shipping-details']">Checkout</button>
+                    <button class="checkout" (click)="placeOrder()">Place Order</button>
                 </div>
             </div>
         </div>

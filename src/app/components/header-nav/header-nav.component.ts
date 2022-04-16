@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { DataService } from 'src/app/services/data.service';
 import { EtheriumService } from 'src/app/services/etherium.service';
 import { FirebaseService } from 'src/app/services/firebase.service';
+import { MessageModalComponent } from '../modal/message.modal.component';
 import { RegisterModalComponent } from '../register-modal/register-modal.component';
 
 @Component({
@@ -14,12 +16,14 @@ export class HeaderNavComponent implements OnInit {
 
   isLogin: boolean = false;
   toggleCollapseNavBar = false;
+  userData: any;
 
-  constructor(private dataService: DataService, private etheriumService: EtheriumService, private firebaseService: FirebaseService, private dialog: MatDialog) { }
+  constructor(private snackBar: MatSnackBar, private dataService: DataService, private etheriumService: EtheriumService, private firebaseService: FirebaseService, private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.dataService.getUserData().subscribe((res: any) => {
       if (res) {
+        this.userData = res
         this.isLogin = true
       }
     })
@@ -43,6 +47,12 @@ export class HeaderNavComponent implements OnInit {
           if (result?.event == "register") {
             this.firebaseService.registerNewUser(result.data).subscribe((res: any) => {
               console.log(res)
+              this.firebaseService.checkUserExists(this.userData[0].user_wallet).subscribe((res) => {
+                this.userData = res.docs.map((docs: any) => {
+                  return { id: docs.id, ...docs.data() }
+                })
+                this.dataService.setUserData(data)
+              })
             }, (err: any) => {
               console.log(err)
             })
@@ -54,4 +64,31 @@ export class HeaderNavComponent implements OnInit {
       }
     })
   }
+
+  registerAsSeller() {
+    this.dialog.open(MessageModalComponent, {
+      data: {
+        message: ['Are You Sure?', 'In order to register as seller you need 100 WEI'],
+        button: ["Ok", "Cancel"]
+      }
+    }).afterClosed().subscribe((res) => {
+      if (res == "Ok") {
+        this.firebaseService.checkUserExists(this.userData[0].user_wallet).subscribe((res) => {
+          const results = res.docs.map((docs: any) => {
+            return { id: docs.id, ...docs.data() }
+          })[0]
+          results.isSeller = true
+          this.firebaseService.updateUserData(results.id, results).subscribe((res) => {
+            this.snackBarMessage("Successfully Register as Seller", "Ok")
+          })
+
+        })
+      }
+    })
+  }
+
+  snackBarMessage(message: string, action = '', config?: MatSnackBarConfig) {
+    return this.snackBar.open(message, action, config);
+  }
+
 }

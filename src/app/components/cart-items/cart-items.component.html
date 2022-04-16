@@ -6,7 +6,7 @@
     <label class="product-removal">Remove</label>
     <label class="product-line-price">Total</label>
 </div>
-<div class="product" *ngFor="let i of item">
+<div class="product" *ngFor="let i of item['data']">
     <div class="product-image">
         <img [src]="i.image">
     </div>
@@ -20,7 +20,7 @@
         <input type="number" disabled [(ngModel)]="i.product_quantity">
     </div>
     <div class="product-removal">
-        <button class="remove-product" (click)="removeItem(i)">
+        <button class="remove-product" (click)="removeItem(i)" *ngIf="item.removeButtonDisplay">
             Remove
         </button>
     </div>

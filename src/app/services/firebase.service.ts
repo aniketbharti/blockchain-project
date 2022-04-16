@@ -7,10 +7,12 @@ import { getDownloadURL, ref, Storage, uploadBytes } from '@angular/fire/storage
 })
 export class FirebaseService {
   userCollection: any;
-  productCollection: any
+  productCollection: any;
+  orderCollection: any;
   constructor(public firestore: Firestore, private storage: Storage) {
     this.userCollection = collection(this.firestore, 'users')
     this.productCollection = collection(this.firestore, 'product')
+    this.orderCollection = collection(this.firestore, 'product')
   }
 
   checkUserExists(accountNumber: number): Observable<any> {
@@ -20,6 +22,10 @@ export class FirebaseService {
 
   addProduct(data: any) {
     return from(addDoc(this.productCollection, data))
+  }
+
+  placeOrder(data: any) {
+    return from(addDoc(this.orderCollection, data))
   }
 
 

@@ -12,22 +12,20 @@
     <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" [routerLink]="['/cart']">Cart</a>
+          <button mat-button [routerLink]="['/cart']">Cart</button>
         </li>
-        <li class="nav-item" *ngIf="!isLogin">
-          <a class="nav-link" (click)="login()">Login</a>
+        <li class="nav-item">
+          <button mat-menu-item (click)="login()" *ngIf="!isLogin">Login</button>
         </li>
-        <li class="nav-item dropdown" *ngIf="isLogin">
-          <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-            Manage Account
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item">My Orders</a>
-            <a class="dropdown-item">Post Item For Sell</a>
-            <div class="dropdown-divider">Manage Posted Items</div>
-            <a class="dropdown-item">Logout</a>
-          </div>
+        <li class="nav-item">
+          <button mat-button [matMenuTriggerFor]="menu" *ngIf="isLogin">Manage Account</button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item>My Orders</button>
+            <button mat-menu-item (click)="registerAsSeller()">Register as Seller</button>
+            <button mat-menu-item>My Products</button>
+            <button mat-menu-item [routerLink]="['/post-product']">Post Product For Sell</button>
+            <button mat-menu-item>Logout</button>
+          </mat-menu>
         </li>
       </ul>
     </div>
