@@ -9,9 +9,10 @@ declare let window: any;
 
 export class EtheriumService {
 
-  contractAddress = "0xA93849d3Ec7F8E628be0e67b298d026758cb1e8a";
+  contractAddress = "0xA2fE66a7D4e38A87665c928c5CE320aC9CE151Fe";
   ABIObj: any;
   contract: any;
+  selectedAccount: any;
 
   constructor(private httpClient: HttpClient) {
     this.execute()
@@ -34,19 +35,19 @@ export class EtheriumService {
   }
 
   async connectMetaMask() {
-    let ethereum = window?.ethereum;
-    if (typeof window?.ethereum !== "undefined") {
+    let provider = window.ethereum;
+    if (typeof provider !== 'undefined') {
       try {
-        await ethereum.request({ method: "eth_requestAccounts" });
-        const accounts = await ethereum.request({ method: "eth_accounts" });
-        return accounts;
-      } catch (error) {
-        console.error("Install MetaMask")
-        throw new Error("Install MetaMak")
+        const accounts = await provider.request({ method: 'eth_requestAccounts' })
+        this.selectedAccount = accounts[0];
+        return accounts
+      } catch (err) {
+        console.log(err)
       }
-    } else {
-      console.error("Install MetaMask")
-      throw new Error("Install MetaMak")
+      window.ethereum.on('accountsChanged', (accounts: any) => {
+        this.selectedAccount = accounts[0];
+        console.log(`Selected account changed to ${this.selectedAccount}`);
+      });
     }
   }
 
@@ -57,9 +58,10 @@ export class EtheriumService {
     }
     return null
   }
+
   registerUser(address: string) {
     const data = {
-      from: address
+      from: this.selectedAccount
     }
     return this.contract.methods.registerUser(address).send(
       data
