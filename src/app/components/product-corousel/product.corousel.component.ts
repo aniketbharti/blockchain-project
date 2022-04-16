@@ -25,7 +25,7 @@ export class ProductCorouselComponent implements OnInit {
         }
       } else {
         if (this.courouselData?.data) {
-          this.result = this.partition(this.courouselData?.data, 3)
+          this.result = this.partition(this.courouselData?.data, 4)
         }
       }
     });

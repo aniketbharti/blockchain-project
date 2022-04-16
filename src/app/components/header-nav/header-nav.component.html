@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
-    <a class="navbar-brand"><img src="assets/logo.png" class="logo" width="140" height="60"></a>
+    <a class="navbar-brand" [routerLink]="['/']"><img src="assets/logo.png" class="logo" width="140" height="60"></a>
     <div class="width-class">
       <app-autosuggest-search></app-autosuggest-search>
     </div>
@@ -17,8 +17,8 @@
         <li class="nav-item">
           <button mat-button (click)="login()" *ngIf="!isLogin">Login</button>
         </li>
-        <li class="nav-item">
-          <button mat-button [matMenuTriggerFor]="menu" *ngIf="isLogin">Manage Account</button>
+        <li class="nav-item" *ngIf="isLogin">
+          <button mat-button [matMenuTriggerFor]="menu">Manage Account</button>
           <mat-menu #menu="matMenu">
             <button mat-menu-item>My Orders</button>
             <button mat-menu-item (click)="registerAsSeller()" *ngIf="!userData[0].isSeller">Register as Seller</button>

@@ -12,7 +12,7 @@ export class FirebaseService {
   constructor(public firestore: Firestore, private storage: Storage) {
     this.userCollection = collection(this.firestore, 'users')
     this.productCollection = collection(this.firestore, 'product')
-    this.orderCollection = collection(this.firestore, 'product')
+    this.orderCollection = collection(this.firestore, 'orders')
   }
 
   checkUserExists(accountNumber: number): Observable<any> {

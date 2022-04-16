@@ -41,7 +41,7 @@ export class HeaderNavComponent implements OnInit {
         const dialogRef = this.dialog.open(RegisterModalComponent, {
           data: { account: etherdata[0] },
           width: '600px',
-          height: '500px',
+          height: '540px',
         });
         dialogRef.afterClosed().subscribe(result => {
           if (result?.event == "register") {
