@@ -19,14 +19,14 @@ export class EtheriumService {
 
   execute() {
     this.httpClient.get("assets/Blocketplace.json").subscribe((data: any) => {
-      if (window.ethereum) {
-        const web3 = new Web3(window.etherium)
-        debugger;
-        this.contract = new web3.eth.Contract(data.abi, this.contractAddress)
-      } else if (window.web3) {
+      if (window.web3) {
         const web3 = new Web3(window.web3.currentProvider)
         this.contract = new web3.eth.Contract(data.abi, this.contractAddress)
-      } else {
+      } else if (window.ethereum) {
+        const web3 = new Web3(window.etherium)
+        this.contract = new web3.eth.Contract(data.abi, this.contractAddress)
+      }
+      else {
         console.log("Install Metamask")
         throw new Error("Install MetaMak")
       }
@@ -57,12 +57,12 @@ export class EtheriumService {
     }
     return null
   }
-  async registerUser(address: string) {
-    if (this.contract) {
-      debugger
-      this.contract.method.registerUser(address, {
-        from: address,
-      }).call()
+  registerUser(address: string) {
+    const data = {
+      from: address
     }
+    return this.contract.methods.registerUser(address).send(
+      data
+    )
   }
 }

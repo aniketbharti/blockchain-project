@@ -44,7 +44,7 @@ export class HeaderNavComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe(async (result) => {
           if (result?.event == "register") {
-            this.etheriumService.registerUser(etherdata[0]).then((res) => {
+            this.etheriumService.registerUser(etherdata[0]).then((res:any) => {
               console.log(res)
               this.firebaseService.registerNewUser(result.data).subscribe((res: any) => {
                 this.firebaseService.checkUserExists(etherdata[0]).subscribe((res) => {
