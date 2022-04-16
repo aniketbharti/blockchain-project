@@ -26,6 +26,6 @@
             <p>Home Decor</p>
         </div>
     </div>
-    <app-product-corousel [courouselData]="recentlyAdded"></app-product-corousel>
-    <app-product-corousel [courouselData]="topTrending"></app-product-corousel>
+    <app-product-corousel [courouselData]="recentlyAdded" *ngIf="recentlyAdded.data.length > 0"></app-product-corousel>
+    <app-product-corousel [courouselData]="topTrending" *ngIf="topTrending.data.length > 0"></app-product-corousel>
 </div>

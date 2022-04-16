@@ -4,15 +4,15 @@
 }
 .product-details {
   float: left;
-  width: 37%;
+  width: 35%;
 }
 .product-price {
   float: left;
-  width: 12%;
+  width: 16%;
 }
 .product-quantity {
   float: left;
-  width: 10%;
+  width: 8%;
 }
 .product-removal {
   float: left;
@@ -47,7 +47,6 @@
 .totals-item {
   @extend .group;
 }
-
 
 .column-labels {
   label {

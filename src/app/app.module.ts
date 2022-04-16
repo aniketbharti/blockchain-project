@@ -10,7 +10,7 @@ import { FiltersComponent } from './components/filters/filters.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppMaterialModule } from './app-material.module';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HeaderNavComponent } from './components/header-nav/header-nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -23,13 +23,15 @@ import { MainCouselComponent } from './components/main-cousel/main-cousel.compon
 import { AutosuggestSearchComponent } from './components/autosuggest-search/autosuggest-search.component';
 import { MultiImageCorouselComponent } from './components/multi-image-corousel/multi-image-corousel.component';
 import { CartPageComponent } from './pages/cart-page/cart-page.component';
-import { initializeApp,provideFirebaseApp } from '@angular/fire/app';
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { environment } from '../environments/environment';
-import { provideFirestore,getFirestore } from '@angular/fire/firestore';
+import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { RegisterModalComponent } from './components/register-modal/register-modal.component';
 import { MessageModalComponent } from './components/modal/message.modal.component';
 import { PostProductComponent } from './pages/post-product/post-product.component';
 import { getStorage, provideStorage } from '@angular/fire/storage';
+import { CartItemsComponent } from './components/cart-items/cart-items.component';
+import { ShippingPageComponent } from './pages/shipping-page/shipping-page.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +49,9 @@ import { getStorage, provideStorage } from '@angular/fire/storage';
     CartPageComponent,
     RegisterModalComponent,
     MessageModalComponent,
-    PostProductComponent
+    PostProductComponent,
+    CartItemsComponent,
+    ShippingPageComponent
   ],
   imports: [
     BrowserModule,
@@ -55,6 +59,7 @@ import { getStorage, provideStorage } from '@angular/fire/storage';
     BrowserAnimationsModule,
     AppMaterialModule,
     ReactiveFormsModule,
+    FormsModule,
     LayoutModule,
     MatToolbarModule,
     MatButtonModule,

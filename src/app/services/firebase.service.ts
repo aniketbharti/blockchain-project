@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { addDoc, query, where, Firestore, collection, getDocs, doc, updateDoc, deleteDoc, documentId } from '@angular/fire/firestore'
+import { addDoc, query, where, Firestore, collection, getDocs, doc, updateDoc, deleteDoc, documentId, limit, orderBy } from '@angular/fire/firestore'
 import { from, Observable } from 'rxjs';
 import { getDownloadURL, ref, Storage, uploadBytes } from '@angular/fire/storage';
 @Injectable({
@@ -13,8 +13,8 @@ export class FirebaseService {
     this.productCollection = collection(this.firestore, 'product')
   }
 
-  checkUserExists(accountNumbe: number): Observable<any> {
-    const q = query(this.userCollection, where("user_wallet", "==", accountNumbe));
+  checkUserExists(accountNumber: number): Observable<any> {
+    const q = query(this.userCollection, where("user_wallet", "==", accountNumber));
     return from(getDocs(q))
   }
 
@@ -54,24 +54,16 @@ export class FirebaseService {
     return from(getDocs(q))
   }
 
-  // getData() {
-  //   return getDocs(this.userCollection)
-  // }
+  updateUserData(id: string, data: any) {
+    const dataToUpdate = doc(this.firestore, 'users', id);
+    return from(updateDoc(dataToUpdate, data))
+  }
 
-  // updateData(id: string) {
-  //   const dataToUpdate = doc(this.firestore, 'users', id);
-  //   updateDoc(dataToUpdate, {
-  //     name: 'Nishant',
-  //     email: 'Nishant123@gmail.com'
-  //   })
-  //     .then(() => {
-  //       alert('Data updated');
-  //       this.getData()
-  //     })
-  //     .catch((err) => {
-  //       alert(err.message)
-  //     })
-  // }
+  getTrendyProducts() {
+    const q = query(this.productCollection, orderBy("product_view"), limit(6));
+    return from(getDocs(q))
+  }
+
 
   // deleteData(id: string) {
   //   const dataToDelete = doc(this.firestore, 'users', id);
