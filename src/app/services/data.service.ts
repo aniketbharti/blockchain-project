@@ -19,6 +19,7 @@ export class DataService {
   }
 
   setUserData(data: Object) {
+    console.log(data)
     localStorage.setItem("userData", JSON.stringify(data))
     this.userDataSubject.next(data)
   }

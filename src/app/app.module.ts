@@ -33,6 +33,8 @@ import { getStorage, provideStorage } from '@angular/fire/storage';
 import { CartItemsComponent } from './components/cart-items/cart-items.component';
 import { ShippingPageComponent } from './pages/shipping-page/shipping-page.component';
 import { ReviewCartComponent } from './pages/review-cart/review-cart.component';
+import { MyProductsComponent } from './pages/my-products/my-products.component';
+import { AgGridModule } from 'ag-grid-angular';
 
 @NgModule({
   declarations: [
@@ -53,7 +55,8 @@ import { ReviewCartComponent } from './pages/review-cart/review-cart.component';
     PostProductComponent,
     CartItemsComponent,
     ShippingPageComponent,
-    ReviewCartComponent
+    ReviewCartComponent,
+    MyProductsComponent
   ],
   imports: [
     BrowserModule,
@@ -72,6 +75,7 @@ import { ReviewCartComponent } from './pages/review-cart/review-cart.component';
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore()),
     provideStorage(() => getStorage()),
+    AgGridModule.withComponents([])
   ],
   providers: [],
   bootstrap: [AppComponent]

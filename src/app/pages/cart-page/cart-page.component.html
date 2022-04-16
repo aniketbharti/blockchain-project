@@ -3,7 +3,7 @@
 </div>
 <div class="container">
     <div class="shopping-cart">
-        <div class="row">
+        <div class="row" *ngIf="!emptyCart">
             <div class="col-md-8">
                 <app-cart-items *ngIf="cartItems.data.length > 0" [item]="cartItems" (eventEmitterData)="removeItem($event)">
                 </app-cart-items>
@@ -26,6 +26,9 @@
                     <button class="checkout" [routerLink]="['/shipping-details']">Checkout</button>
                 </div>
             </div>
+        </div>
+        <div class="card" style="width: 100%; height: 100%; padding: 30px;" *ngIf="emptyCart">
+            <i><h4>Cart is Empty</h4></i>
         </div>
     </div>
 </div>

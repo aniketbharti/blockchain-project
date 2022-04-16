@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
-    <a class="navbar-brand">Navbar</a>
+    <a class="navbar-brand"><img src="assets/logo.png" class="logo" width="140" height="60"></a>
     <div class="width-class">
       <app-autosuggest-search></app-autosuggest-search>
     </div>
@@ -15,15 +15,15 @@
           <button mat-button [routerLink]="['/cart']">Cart</button>
         </li>
         <li class="nav-item">
-          <button mat-menu-item (click)="login()" *ngIf="!isLogin">Login</button>
+          <button mat-button (click)="login()" *ngIf="!isLogin">Login</button>
         </li>
         <li class="nav-item">
           <button mat-button [matMenuTriggerFor]="menu" *ngIf="isLogin">Manage Account</button>
           <mat-menu #menu="matMenu">
             <button mat-menu-item>My Orders</button>
-            <button mat-menu-item (click)="registerAsSeller()">Register as Seller</button>
-            <button mat-menu-item>My Products</button>
-            <button mat-menu-item [routerLink]="['/post-product']">Post Product For Sell</button>
+            <button mat-menu-item (click)="registerAsSeller()" *ngIf="!userData[0].isSeller">Register as Seller</button>
+            <button mat-menu-item [routerLink]="['/my-products']" *ngIf="userData[0].isSeller">My Products</button>
+            <button mat-menu-item [routerLink]="['/post-product']" *ngIf="userData[0].isSeller">Post Product For Sell</button>
             <button mat-menu-item>Logout</button>
           </mat-menu>
         </li>

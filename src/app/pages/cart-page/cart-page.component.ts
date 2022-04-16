@@ -15,6 +15,7 @@ export class CartPageComponent implements OnInit {
   totalShipping: number = 0;
   totalPrice: number = 0;
   results: any;
+  emptyCart: boolean = false;
 
   constructor(private snackBar: MatSnackBar, private firebaseService: FirebaseService, private dataService: DataService) { }
 
@@ -31,6 +32,11 @@ export class CartPageComponent implements OnInit {
         return { id: docs.id, ...docs.data() }
       })[0]
       this.cartItems.data = this.results.cart;
+      if(this.cartItems.data.length == 0){
+        this.emptyCart = true
+      }else{
+        this.emptyCart = false
+      }
       this.calculatePrices()
     })
   }
@@ -39,6 +45,11 @@ export class CartPageComponent implements OnInit {
     this.cartItems.data.splice(index, 1)
     this.firebaseService.updateUserData(this.userData[0].id, this.results).subscribe((res) => {
       this.snackBarMessage("Item Deleted Successfully")
+      if(this.cartItems.data.length == 0){
+        this.emptyCart = true
+      }else{
+        this.emptyCart = false
+      }
       this.calculatePrices()
     })
   }

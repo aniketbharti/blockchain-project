@@ -70,6 +70,11 @@ export class FirebaseService {
     return from(getDocs(q))
   }
 
+  getMyProduct(data: string) {
+    const q = query(this.productCollection, where("user", '==', data));
+    return from(getDocs(q))
+  }
+
 
   // deleteData(id: string) {
   //   const dataToDelete = doc(this.firestore, 'users', id);

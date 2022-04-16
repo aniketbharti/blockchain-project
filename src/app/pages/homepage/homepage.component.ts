@@ -8,9 +8,14 @@ import { FirebaseService } from 'src/app/services/firebase.service';
   styleUrls: ['./homepage.component.scss']
 })
 export class HomepageComponent implements OnInit {
-  // images = [944, 1011, 984, 222, 444].map((n) => `https://picsum.photos/id/${n}/900/500`);
-  topTrending: CourouselDataInterface = {} as CourouselDataInterface
-  recentlyAdded: CourouselDataInterface = {} as CourouselDataInterface
+  topTrending: CourouselDataInterface = {
+    heading: "",
+    data: []
+  }
+  recentlyAdded: CourouselDataInterface = {
+    heading: "",
+    data: []
+  }
   results: any[] = [];
 
   constructor(private fireBaseService: FirebaseService) { }

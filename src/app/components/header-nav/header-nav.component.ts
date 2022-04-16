@@ -79,6 +79,7 @@ export class HeaderNavComponent implements OnInit {
           })[0]
           results.isSeller = true
           this.firebaseService.updateUserData(results.id, results).subscribe((res) => {
+            this.dataService.setUserData([results])
             this.snackBarMessage("Successfully Register as Seller", "Ok")
           })
 
