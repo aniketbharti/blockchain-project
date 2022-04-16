@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { ABI } from '../constants/abi.constant';
 import Web3 from "web3";
+import { HttpClient } from '@angular/common/http';
 
 declare let window: any;
 @Injectable({
@@ -8,26 +8,29 @@ declare let window: any;
 })
 
 export class EtheriumService {
+
   contractAddress = "0xA93849d3Ec7F8E628be0e67b298d026758cb1e8a";
-  ABI: any;
+  ABIObj: any;
   contract: any;
 
-  constructor() {
-    this.ABI = ABI
+  constructor(private httpClient: HttpClient) {
     this.execute()
   }
 
-  async execute() {
-    if (window.ethereum) {
-      const web3 = new Web3(window.etherium)
-      this.contract = new web3.eth.Contract(this.ABI, this.contractAddress)
-    } else if (window.web3) {
-      const web3 = new Web3(window.web3.currentProvider)
-      this.contract = new web3.eth.Contract(this.ABI, this.contractAddress)
-    } else {
-      console.log("Install Metamask")
-      throw new Error("Install MetaMak")
-    }
+  execute() {
+    this.httpClient.get("assets/Blocketplace.json").subscribe((data: any) => {
+      if (window.ethereum) {
+        const web3 = new Web3(window.etherium)
+        debugger;
+        this.contract = new web3.eth.Contract(data.abi, this.contractAddress)
+      } else if (window.web3) {
+        const web3 = new Web3(window.web3.currentProvider)
+        this.contract = new web3.eth.Contract(data.abi, this.contractAddress)
+      } else {
+        console.log("Install Metamask")
+        throw new Error("Install MetaMak")
+      }
+    })
   }
 
   async connectMetaMask() {
@@ -54,14 +57,12 @@ export class EtheriumService {
     }
     return null
   }
-
-
   async registerUser(address: string) {
     if (this.contract) {
-      this.contract.registerUser(address)
+      debugger
+      this.contract.method.registerUser(address, {
+        from: address,
+      }).call()
     }
   }
-
-
-
 }

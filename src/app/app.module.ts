@@ -35,6 +35,7 @@ import { ShippingPageComponent } from './pages/shipping-page/shipping-page.compo
 import { ReviewCartComponent } from './pages/review-cart/review-cart.component';
 import { MyProductsComponent } from './pages/my-products/my-products.component';
 import { AgGridModule } from 'ag-grid-angular';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -71,6 +72,7 @@ import { AgGridModule } from 'ag-grid-angular';
     MatSidenavModule,
     MatIconModule,
     MatListModule,
+    HttpClientModule,
     NgbModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore()),
