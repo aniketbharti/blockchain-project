@@ -65,18 +65,21 @@ export class PartialRefundComponent implements OnInit {
 
   changeStatus(data: any) {
     this.etheriumService.refund(data.orderid, data.walletBuyer, this.userData[0].user_wallet, data.partial_amout.toString()).then((res: any) => {
-      console.log(res)
-      this.fireBaseService.searchSpecificOrder(data.orderid).subscribe((res2) => {
-        const results: any = res2.docs.map((docs: any) => {
-          return { id: docs.id, ...docs.data() }
+      if (res !== undefined) {
+        console.log(res)
+        this.fireBaseService.searchSpecificOrder(data.orderid).subscribe((res2) => {
+          const results: any = res2.docs.map((docs: any) => {
+            return { id: docs.id, ...docs.data() }
+          })
+          results[0].payment = "Refund"
+          this.fireBaseService.updateOrder(results[0].id, results[0]).subscribe((res: any) => {
+            this.snackBar.open("Refund Processed Sucessfully")
+            this.getPartialOrders()
+          })
         })
-        results[0].payment = "Refund"
-        this.fireBaseService.updateOrder(results[0].id, results[0]).subscribe((res: any) => {
-          this.snackBar.open("Refund Processed Sucessfully")
-          this.getPartialOrders()
-        })
-      })
-
+      } else {
+        alert("Error while Refund")
+      }
     })
   }
 

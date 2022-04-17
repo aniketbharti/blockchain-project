@@ -73,7 +73,12 @@ export class ReviewCartComponent implements OnInit {
       const data = res.id;
       let arr: any[] = []
       this.results.cart.forEach((ele: any) => {
-        arr.push(this.buyItem(ele.seller_id, data, ele.product_id, ele.product_title, (ele.price + ele.shipping_charges).toString(), "0", this.results.user_wallet))
+        this.buyItem(ele.seller_id, data, ele.product_id, ele.product_title, (ele.price + ele.shipping_charges).toString(), "0", this.results.user_wallet).then((res: any) => {
+          if (res !== undefined) {
+            arr.push(res)
+          }
+        })
+
       })
       Promise.all(arr).then((resdata) => {
         console.log(resdata)
@@ -105,7 +110,11 @@ export class ReviewCartComponent implements OnInit {
       const data = res.id;
       let arr: any[] = []
       this.results.partial_cart.forEach((ele: any) => {
-        arr.push(this.buyPartial(ele.seller_id, data, ele.product_id, ele.product_title, (ele.price + ele.shipping_charges).toString(), "1", this.results.user_wallet, this.results.partial_cart[0].partial_amount.toString()))
+        this.buyPartial(ele.seller_id, data, ele.product_id, ele.product_title, (ele.price + ele.shipping_charges).toString(), "1", this.results.user_wallet, this.results.partial_cart[0].partial_amount.toString()).then((res: any) => {
+          if (res !== undefined) {
+            arr.push(res)
+          }
+        })
       })
       Promise.all(arr).then((resdata) => {
         this.results.partial_cart = []

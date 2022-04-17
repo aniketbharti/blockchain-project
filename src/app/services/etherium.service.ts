@@ -10,7 +10,7 @@ declare let window: any;
 
 export class EtheriumService {
 
-  contractAddress = "0x69DaB36483811Ed39a9545ac709D20e441302808";
+  contractAddress = "0x0A340c47bD193766f24A780f62f8b581b672311b";
   ABIObj: any;
   contract: any;
   weiConverter: any;
@@ -66,45 +66,65 @@ export class EtheriumService {
 
 
   registerAsSeller(address: string, amount: string) {
-    return this.contract.methods.registerUserAsSeller(address).send(
-      {
-        from: address,
-        value: this.weiConverter(amount, "ether"),
-        gas: 3000000,
-      }
-    );
+    try {
+      return this.contract.methods.registerUserAsSeller(address).send(
+        {
+          from: address,
+          value: this.weiConverter(amount, "ether"),
+          gas: 3000000,
+        }
+      );
+    } catch (err) {
+      console.log(err)
+    }
   }
 
 
   registerUser(address: string) {
-    return this.contract.methods.registerUser(address).send({
-      from: address,
-      gas: 3000000,
-    });
+    try {
+      return this.contract.methods.registerUser(address).send({
+        from: address,
+        gas: 3000000,
+      });
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   buyProduct(sellerAddress: string, id: string, productId: string, productName: string, price: string, paymentStatus: string, buyerAddress: string) {
-    return this.contract.methods.payForOrder(sellerAddress, id, productId, productName, price, paymentStatus).send({
-      from: buyerAddress,
-      value: this.weiConverter(price, "ether"),
-      gas: 3000000
-    })
+    try {
+      return this.contract.methods.payForOrder(sellerAddress, id, productId, productName, this.weiConverter(price, "ether"), paymentStatus).send({
+        from: buyerAddress,
+        value: this.weiConverter(price, "ether"),
+        gas: 3000000
+      })
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   buyProductPartial(sellerAddress: string, id: string, productId: string, productName: string, price: string, paymentStatus: string, buyerAddress: string, partial_amt: string) {
-    return this.contract.methods.payForOrder(sellerAddress, id, productId, productName, price, paymentStatus).send({
-      from: buyerAddress,
-      value: this.weiConverter(partial_amt, "ether"),
-      gas: 3000000
-    })
+    try {
+      return this.contract.methods.payForOrder(sellerAddress, id, productId, productName, this.weiConverter(price, "ether"), paymentStatus).send({
+        from: buyerAddress,
+        value: this.weiConverter(partial_amt, "ether"),
+        gas: 3000000
+      })
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   refund(buyerAddress: string, orderid: string, sellerAddress: string, partial_amount: string) {
-    return this.contract.methods.refund(buyerAddress, orderid).send({
-      from: sellerAddress,
-      value: this.weiConverter(partial_amount, "ether"),
-      gas: 3000000
-    })
+    try {
+      return this.contract.methods.refund(buyerAddress, orderid).send({
+        from: sellerAddress,
+        value: this.weiConverter(partial_amount, "ether"),
+        gas: 3000000
+      })
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   async handleWithdraw(address: string) {

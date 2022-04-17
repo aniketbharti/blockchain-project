@@ -33,6 +33,10 @@ export class HeaderNavComponent implements OnInit {
     })
   }
 
+  logout() {
+    this.dataService.logout()
+  }
+
   async seller_balance() {
     const etherdata = await this.etheriumService.connectMetaMask();
     this.etheriumService.getSellerBalance(etherdata[0]).then((res: any) => {
@@ -76,16 +80,20 @@ export class HeaderNavComponent implements OnInit {
         dialogRef.afterClosed().subscribe(async (result) => {
           if (result?.event == "register") {
             this.etheriumService.registerUser(etherdata[0]).then((res: any) => {
-              this.firebaseService.registerNewUser(result.data).subscribe((res: any) => {
-                this.firebaseService.checkUserExists(etherdata[0]).subscribe((res) => {
-                  this.userData = res.docs.map((docs: any) => {
-                    return { id: docs.id, ...docs.data() }
+              if (res !== undefined) {
+                this.firebaseService.registerNewUser(result.data).subscribe((res: any) => {
+                  this.firebaseService.checkUserExists(etherdata[0]).subscribe((res) => {
+                    this.userData = res.docs.map((docs: any) => {
+                      return { id: docs.id, ...docs.data() }
+                    })
+                    this.dataService.setUserData(this.userData)
                   })
-                  this.dataService.setUserData(this.userData)
+                }, (err: any) => {
+                  console.log(err)
                 })
-              }, (err: any) => {
-                console.log(err)
-              })
+              } else {
+                alert("Error while Registering ...")
+              }
             })
           }
         });
@@ -99,23 +107,27 @@ export class HeaderNavComponent implements OnInit {
   registerAsSeller() {
     this.dialog.open(MessageModalComponent, {
       data: {
-        message: ['Are You Sure?', 'In order to register as seller you need 100 WEI'],
+        message: ['Are You Sure?', 'In order to register as seller you need 0.5 Ether'],
         button: ["Ok", "Cancel"]
       }
     }).afterClosed().subscribe((res) => {
       if (res == "Ok") {
-        this.etheriumService.registerAsSeller(this.userData[0].user_wallet, "10").then((res1: any) => {
-          console.log(res1)
-          this.firebaseService.checkUserExists(this.userData[0].user_wallet).subscribe((res) => {
-            const results = res.docs.map((docs: any) => {
-              return { id: docs.id, ...docs.data() }
-            })[0]
-            results.isSeller = true
-            this.firebaseService.updateUserData(results.id, results).subscribe((res) => {
-              this.dataService.setUserData([results])
-              this.snackBarMessage("Successfully Register as Seller", "Ok")
+        this.etheriumService.registerAsSeller(this.userData[0].user_wallet, "0.5").then((res1: any) => {
+          if (res !== undefined) {
+            console.log(res1)
+            this.firebaseService.checkUserExists(this.userData[0].user_wallet).subscribe((res) => {
+              const results = res.docs.map((docs: any) => {
+                return { id: docs.id, ...docs.data() }
+              })[0]
+              results.isSeller = true
+              this.firebaseService.updateUserData(results.id, results).subscribe((res) => {
+                this.dataService.setUserData([results])
+                this.snackBarMessage("Successfully Register as Seller", "Ok")
+              })
             })
-          })
+          } else {
+            alert("Error while Registering as Seller ...")
+          }
         })
       }
     })
