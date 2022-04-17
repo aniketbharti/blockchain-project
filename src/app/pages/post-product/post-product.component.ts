@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { DataService } from 'src/app/services/data.service';
 import { FirebaseService } from 'src/app/services/firebase.service';
 
@@ -12,14 +13,16 @@ export class PostProductComponent implements OnInit {
   postForm: FormGroup;
   selectedFiles: any[] = [];
   userDetails: any;
+  imageError: boolean = false;
+  isShipping: any;
 
-  constructor(private fb: FormBuilder, private firebaseService: FirebaseService, private dataService: DataService) {
+  constructor(private snackBar: MatSnackBar, private fb: FormBuilder, private firebaseService: FirebaseService, private dataService: DataService) {
     this.postForm = this.fb.group({
       product_title: [null, [Validators.required]],
       product_category: [null, [Validators.required]],
       product_subcategory: [null, [Validators.required]],
       product_desc: [null, [Validators.required]],
-      product_quantity: [null, [Validators.required]],
+      product_quantity: [{ value: 1, disabled: true }, [Validators.required]],
       price: [null, [Validators.required]],
       partial_payment: ["no", [Validators.required]],
       free_shipping: ["no", [Validators.required]],
@@ -29,9 +32,16 @@ export class PostProductComponent implements OnInit {
       features: this.fb.array([]),
       product_view: [0, []]
     });
+    this.isShipping = this.postForm.get("free_shipping")?.value
+    this.postForm.get("free_shipping")?.valueChanges.subscribe(selectedValue => {
+      console.log('address changed')
+      this.isShipping = selectedValue
+      console.log(selectedValue)
+    })
   }
 
   uploadFiles(event: any) {
+    this.imageError = false
     this.selectedFiles = Array.from(event.target.files)
 
   }
@@ -43,7 +53,7 @@ export class PostProductComponent implements OnInit {
   ngOnInit(): void {
 
     this.features.push(this.addAFeature("Color"))
-    this.features.push(this.addAFeature("Condition"))
+    this.features.push(this.addAFeature("Replacement Policy"))
     this.dataService.getUserData().subscribe(res => {
       this.userDetails = res
       console.log(res)
@@ -70,7 +80,8 @@ export class PostProductComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.postForm.valid) {
+    this.imageError = this.selectedFiles.length == 0 ? true : false;
+    if (this.postForm.valid && this.selectedFiles.length > 0) {
       this.firebaseService.uploadImage(this.selectedFiles, "image/product", this.userDetails?.id
       ).subscribe((res) => {
         const data = this.postForm.getRawValue()
@@ -78,6 +89,8 @@ export class PostProductComponent implements OnInit {
         data["user"] = this.userDetails[0].id
         this.firebaseService.addProduct(data).subscribe(res => {
           this.postForm.reset()
+          this.selectedFiles = []
+          this.snackBarMessage("Product Added")
         })
       })
     } else {
@@ -91,5 +104,8 @@ export class PostProductComponent implements OnInit {
     return this.postForm?.controls
   }
 
+  snackBarMessage(message: string, action = '', config?: MatSnackBarConfig) {
+    return this.snackBar.open(message, action, config);
+  }
 
 }

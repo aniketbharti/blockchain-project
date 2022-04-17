@@ -24,6 +24,7 @@
                         <select class="form-control" id="exampleFormControlSelect1" formControlName="product_category">
                             <option value="Electronics">Electronics</option>
                             <option value="Applicances">Applicances</option>
+                            <option value="Furniture">Furniture</option>
                             <option value="Fashion">Fashion</option>
                             <option value="Beauty and Grooming">Beauty and Grooming</option>
                             <option value="Home Decor">Home Decor</option>
@@ -76,7 +77,7 @@
                     <div class="col-md-4 mb-3">
                         <label for="validationCustom04">Price Per Item<span class="text-danger">*</span></label>
                         <input type="number" class="form-control" id="validationCustom04"
-                            placeholder="Enter Price in Wei" formControlName="price">
+                            placeholder="Enter Price in Ether" formControlName="price">
                         <div *ngIf="!f.price?.valid && (f.price?.dirty ||f.price?.touched)">
                             <div [hidden]="!f.price.errors?.required" class="text-error text-danger">
                                 Price is required
@@ -174,7 +175,7 @@
                         </div>
 
                     </div>
-                    <div class="col-md-4 mb-3">
+                    <div class="col-md-4 mb-3" *ngIf="isShipping == 'no'" >
                         <label for="validationCustom04">Shipping Charges<span class="text-danger">*</span></label>
                         <input type="number" class="form-control" id="validationCustom04" placeholder="Shipping Charges"
                             formControlName="shipping_charges">
@@ -191,6 +192,9 @@
                     <div class="col-md-2">
                         <p><label for="file" style="cursor: pointer;">Upload Images<span
                                     class="text-danger">*</span></label></p>
+                        <div *ngIf="imageError" class="text-error text-danger">
+                            Image Required
+                        </div>
                     </div>
                     <div class="col-md-4">
                         <p><input type="file" accept="image/*" name="image" id="file" (change)="uploadFiles($event)"

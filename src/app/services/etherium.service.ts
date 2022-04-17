@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import Web3 from "web3";
 import { HttpClient } from '@angular/common/http';
+import { DataService } from './data.service';
 
 declare let window: any;
 @Injectable({
@@ -12,8 +13,9 @@ export class EtheriumService {
   contractAddress = "0x69DaB36483811Ed39a9545ac709D20e441302808";
   ABIObj: any;
   contract: any;
+  weiConverter: any;
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient, private dataService: DataService) {
     this.execute()
   }
 
@@ -21,11 +23,11 @@ export class EtheriumService {
     this.httpClient.get("assets/Blocketplace.json").subscribe((data: any) => {
       if (window.web3) {
         const web3 = new Web3(window.web3.currentProvider)
+        this.weiConverter = web3.utils.toWei
         this.contract = new web3.eth.Contract(data.abi, this.contractAddress)
         window.ethereum.enable();
       } else if (window.ethereum) {
         const web3 = new Web3(window.etherium)
-        // debugger;
         this.contract = new web3.eth.Contract(data.abi, this.contractAddress)
         window.ethereum.enable();
       } else {
@@ -41,6 +43,10 @@ export class EtheriumService {
       try {
         await ethereum.request({ method: "eth_requestAccounts" });
         const accounts = await ethereum.request({ method: "eth_accounts" });
+        window.ethereum.on('accountsChanged', (accounts: any) => {
+          console.log("hi")
+          this.dataService.logout()
+        });
         return accounts;
       } catch (error) {
         console.error("Install MetaMask")
@@ -53,20 +59,23 @@ export class EtheriumService {
   }
 
 
-  registerAsSeller(address: string) {
-    if (this.contract) {
-      return this.contract.methods.registerUserAsSeller(address).send({
-        from: address
-      });
-    }
-    return null
+  registerAsSeller(address: string, amount: string) {
+    return this.contract.methods.registerUserAsSeller(address).send(
+      {
+        from: address,
+        value: this.weiConverter(amount, "ether"),
+        gas: 3000000,
+      }
+    );
   }
 
-  async registerUser(address: string) {
-    if (this.contract) {
-      this.contract.methods.registerUser(address).send({
-        from: address
-      });
-    }
+
+  registerUser(address: string) {
+    return this.contract.methods.registerUser(address).send({
+      from: address,
+      gas: 3000000,
+    });
   }
+
+  
 }
