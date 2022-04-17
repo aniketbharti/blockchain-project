@@ -6,8 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./main-cousel.component.scss']
 })
 export class MainCouselComponent implements OnInit {
-  images = [944, 1011, 984].map((n) => `https://picsum.photos/id/${n}/900/500`);
-
+  images = ["assets/1.gif", "assets/2.jpeg", "assets/3.jpeg"];
+  
   constructor() { }
 
   ngOnInit(): void {

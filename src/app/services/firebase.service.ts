@@ -80,6 +80,11 @@ export class FirebaseService {
     return from(getDocs(q))
   }
 
+  getRecentlyAddedProducts() {
+    const q = query(this.productCollection, orderBy("timestamp", "asc"), limit(6));
+    return from(getDocs(q))
+  }
+
   getMyProduct(data: string) {
     const q = query(this.productCollection, where("user", '==', data));
     return from(getDocs(q))

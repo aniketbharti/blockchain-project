@@ -16,20 +16,28 @@ export class HomepageComponent implements OnInit {
     heading: "",
     data: []
   }
-  results: any[] = [];
+  results1: any[] = [];
+  results2: any[] = [];
 
   constructor(private fireBaseService: FirebaseService) { }
 
   ngOnInit(): void {
     this.fireBaseService.getTrendyProducts().subscribe((res) => {
-      this.results = res.docs.map((docs: any) => {
+      this.results1 = res.docs.map((docs: any) => {
         return { id: docs.id, ...docs.data() }
       })
-      console.log(this.results)
-      this.recentlyAdded.heading = "Recently Added"
-      this.recentlyAdded.data = this.results
+      this.recentlyAdded.data = this.results1
       this.topTrending.heading = "Top Trending"
-      this.topTrending.data = this.results
+      this.topTrending.data = this.results1
+    })
+
+    this.fireBaseService.getRecentlyAddedProducts().subscribe((res) => {
+      this.results2 = res.docs.map((docs: any) => {
+        return { id: docs.id, ...docs.data() }
+      })
+      this.recentlyAdded.heading = "Recently Added"
+      this.recentlyAdded.data = this.results2
+      console.log(this.results2)
     })
   }
 

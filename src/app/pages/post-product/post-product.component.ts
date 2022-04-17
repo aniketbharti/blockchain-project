@@ -88,6 +88,7 @@ export class PostProductComponent implements OnInit {
         data["imagePaths"] = res
         data["user"] = this.userDetails[0].id
         data["wallet"] = this.userDetails[0]?.user_wallet
+        data["timestamp"] = Math.floor(Date.now() / 1000)
         this.firebaseService.addProduct(data).subscribe(res => {
           this.postForm.reset()
           this.selectedFiles = []
