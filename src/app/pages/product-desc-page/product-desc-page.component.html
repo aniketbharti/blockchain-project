@@ -34,7 +34,7 @@
                             </button>
                         </div>
                         <div class="margin-class" *ngIf="results[0]?.partial_payment == 'yes'">
-                            <button type="button" class="btn">
+                            <button type="button" class="btn" (click)="addToParitial()">
                                 Book with Token Amount <i class="fas fa-shopping-cart"></i>
                             </button>
                         </div>

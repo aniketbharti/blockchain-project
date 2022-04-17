@@ -16,12 +16,13 @@ export class RegisterModalComponent {
       email: [null, [Validators.required, Validators.email]],
       phone: [null, [Validators.required, Validators.min(1111111111), Validators.max(9999999999)]],
       user_wallet: [{ value: data['account'], disabled: true }, [Validators.required]],
-      address: [[]],
       isSeller: [false],
-      cart: [[]]
+      address: [[]],
+      cart: [[]],
+      partial_cart: [[]]
     });
-
   }
+  
 
   onSubmit(): void {
     if (this.registerForm.valid) {

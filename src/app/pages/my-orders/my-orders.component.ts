@@ -16,7 +16,7 @@ export class MyOrdersComponent implements OnInit {
     { field: "shipment", headerName: "Shipping", sortable: true, filter: true, resizable: true },
     { field: "shipping", headerName: "Address", sortable: true, filter: true, resizable: true },
     {
-      field: "partial_payment", headerName: "Pay", sortable: true, filter: true, resizable: true, cellRenderer: (params: any) => {
+      field: "partial_payment", headerName: "Pay Remaining", sortable: true, filter: true, resizable: true, cellRenderer: (params: any) => {
         const status = params.data.payment == 'Full';
         if (status)
           return ''

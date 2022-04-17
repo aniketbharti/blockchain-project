@@ -38,6 +38,7 @@ import { MyProductsComponent } from './pages/my-products/my-products.component';
 import { AgGridModule } from 'ag-grid-angular';
 import { HttpClientModule } from '@angular/common/http';
 import { MyOrdersComponent } from './pages/my-orders/my-orders.component';
+import { PartialPaymentFormComponent } from './components/partial-payment-form/partial-payment-form.component';
 
 @NgModule({
   declarations: [
@@ -61,7 +62,8 @@ import { MyOrdersComponent } from './pages/my-orders/my-orders.component';
     ShippingPageComponent,
     ReviewCartComponent,
     MyProductsComponent,
-    MyOrdersComponent
+    MyOrdersComponent,
+    PartialPaymentFormComponent
   ],
   imports: [
     BrowserModule,

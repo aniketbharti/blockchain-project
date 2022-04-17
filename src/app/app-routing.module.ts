@@ -15,6 +15,7 @@ const routes: Routes = [
   { path: 'search', component: SearchPageComponent },
   { path: 'product-details', component: ProductDescPageComponent },
   { path: 'cart', component: CartPageComponent },
+  { path: 'partial-order', component: CartPageComponent },
   { path: "post-product", component: PostProductComponent },
   { path: "shipping-details", component: ShippingPageComponent },
   { path: "shipping-details", component: ShippingPageComponent },

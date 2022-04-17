@@ -9,7 +9,7 @@
                 </app-cart-items>
             </div>
             <div class="col-md-1"></div>
-            <div class="col-md-3 ">
+            <div class="col-md-3" *ngIf="cartItems.data.length > 0 && address">
                 <div class="totals card card-class">
                     <p class="margin-class">{{address?.name}}</p>
                     <p class="margin-class">{{address?.addr1}}</p>
@@ -32,7 +32,20 @@
                         <label>Grand Total</label>
                         <div class="totals-value" id="cart-total">{{totalPrice}} WEI</div>
                     </div>
-                    <button class="checkout" (click)="placeOrder()">Place Order</button>
+                    <div class="totals-item text-danger" *ngIf="mode == 'partial'">
+                        <label>Partial Token</label>
+                        <div class="totals-value" id="cart-total"> - {{cartItems.data[0].partial_amount}} ETH</div>
+                    </div>
+                    <div class="totals-item text-primary" *ngIf="mode == 'partial'">
+                        <label>Amount Left</label>
+                        <div class="totals-value" id="cart-total">{{totalPrice - cartItems.data[0].partial_amount}} ETH
+                        </div>
+                    </div>
+                    <button class="checkout" (click)="placeOrder()" *ngIf="mode != 'partial'; else loggedOut">Place
+                        Order</button>
+                    <ng-template #loggedOut>
+                        <button class="checkout" (click)="placePartialOrder()">Pay Booking Price</button>
+                    </ng-template>
                 </div>
             </div>
         </div>

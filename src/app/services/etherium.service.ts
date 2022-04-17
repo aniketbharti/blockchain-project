@@ -90,7 +90,15 @@ export class EtheriumService {
       gas: 3000000
     })
   }
-  
+
+  buyProductPartial(sellerAddress: string, id: string, productId: string, productName: string, price: string, paymentStatus: string, buyerAddress: string, partial_amt: string) {
+    return this.contract.methods.payForOrder(sellerAddress, id, productId, productName, price, paymentStatus).send({
+      from: buyerAddress,
+      value: this.weiConverter(partial_amt, "ether"),
+      gas: 3000000
+    })
+  }
+
   async handleWithdraw(address: string) {
     if (this.contract) {
       try {

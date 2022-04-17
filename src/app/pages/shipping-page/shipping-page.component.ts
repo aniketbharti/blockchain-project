@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DataService } from 'src/app/services/data.service';
 import { FirebaseService } from 'src/app/services/firebase.service';
 
@@ -15,8 +15,9 @@ export class ShippingPageComponent implements OnInit {
   userData: any;
   results: any;
   address: any;
+  mode: string;
 
-  constructor(private snackBar: MatSnackBar, private router: Router, private fb: FormBuilder, private firebaseService: FirebaseService, private dataService: DataService) {
+  constructor(private snackBar: MatSnackBar, private actRoute: ActivatedRoute, private router: Router, private fb: FormBuilder, private firebaseService: FirebaseService, private dataService: DataService) {
     this.shippingForm = this.fb.group({
       name: [null, [Validators.required, Validators.minLength(10)]],
       addr1: [null, [Validators.required]],
@@ -29,7 +30,7 @@ export class ShippingPageComponent implements OnInit {
     this.dataService.getUserData().subscribe((res) => {
       this.userData = res
     })
-
+    this.mode = this.actRoute.snapshot.queryParams["mode"]
   }
 
   ngOnInit(): void {
@@ -51,8 +52,12 @@ export class ShippingPageComponent implements OnInit {
       this.firebaseService.updateUserData(this.userData[0].id, this.results).subscribe((res) => {
         this.snackBarMessage("Address Added Successfully")
         this.router.navigate([`/review-cart`]);
+        if (this.mode == 'partial') {
+          this.router.navigate(['/review-cart'], { queryParams: { mode: 'partial' } })
+        } else {
+          this.router.navigate(['/review-cart'])
+        }
       })
-
     } else {
       this.shippingForm.markAllAsTouched()
     }
