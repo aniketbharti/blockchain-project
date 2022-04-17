@@ -27,6 +27,7 @@ import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { environment } from '../environments/environment';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { RegisterModalComponent } from './components/register-modal/register-modal.component';
+import { SellerBalanceModalComponent } from './components/seller-balance-modal/seller-balance.modal.component';
 import { MessageModalComponent } from './components/modal/message.modal.component';
 import { PostProductComponent } from './pages/post-product/post-product.component';
 import { getStorage, provideStorage } from '@angular/fire/storage';
@@ -52,6 +53,7 @@ import { HttpClientModule } from '@angular/common/http';
     MultiImageCorouselComponent,
     CartPageComponent,
     RegisterModalComponent,
+    SellerBalanceModalComponent,
     MessageModalComponent,
     PostProductComponent,
     CartItemsComponent,
