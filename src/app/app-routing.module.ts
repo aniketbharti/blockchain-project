@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { PartialRefundComponent } from './components/partial-refund/partial-refund.component';
 import { CartPageComponent } from './pages/cart-page/cart-page.component';
 import { HomepageComponent } from './pages/homepage/homepage.component';
 import { MyOrdersComponent } from './pages/my-orders/my-orders.component';
@@ -22,6 +23,8 @@ const routes: Routes = [
   { path: "review-cart", component: ReviewCartComponent },
   { path: "my-products", component: MyProductsComponent },
   { path: "my-orders", component: MyOrdersComponent },
+  { path: "refund", component: PartialRefundComponent },
+
 ];
 
 @NgModule({

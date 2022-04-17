@@ -39,6 +39,7 @@ import { AgGridModule } from 'ag-grid-angular';
 import { HttpClientModule } from '@angular/common/http';
 import { MyOrdersComponent } from './pages/my-orders/my-orders.component';
 import { PartialPaymentFormComponent } from './components/partial-payment-form/partial-payment-form.component';
+import { PartialRefundComponent } from './components/partial-refund/partial-refund.component';
 
 @NgModule({
   declarations: [
@@ -63,7 +64,8 @@ import { PartialPaymentFormComponent } from './components/partial-payment-form/p
     ReviewCartComponent,
     MyProductsComponent,
     MyOrdersComponent,
-    PartialPaymentFormComponent
+    PartialPaymentFormComponent,
+    PartialRefundComponent
   ],
   imports: [
     BrowserModule,

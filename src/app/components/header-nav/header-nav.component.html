@@ -25,7 +25,8 @@
             <button mat-menu-item [routerLink]="['/my-products']" *ngIf="userData[0].isSeller">My Products</button>
             <button mat-menu-item [routerLink]="['/post-product']" *ngIf="userData[0].isSeller">Post Product For
               Sell</button>
-            <button mat-menu-item (click)="seller_balance()" *ngIf="userData[0].isSeller">Seller Balance</button>
+              <button mat-menu-item [routerLink]="['/refund']" *ngIf="userData[0].isSeller">Refund For Partial Orders</button>
+              <button mat-menu-item (click)="seller_balance()" *ngIf="userData[0].isSeller">Seller Balance</button>
             <button mat-menu-item>Logout</button>
           </mat-menu>
         </li>

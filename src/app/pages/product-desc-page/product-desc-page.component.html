@@ -10,9 +10,9 @@
             <div class="product-content">
                 <h2 class="product-title">{{results[0]?.product_title}}</h2>
                 <div class="product-price">
-                    <h4 class="new-price"><span>Price : {{results[0].price}} WEI</span></h4>
+                    <h4 class="new-price"><span>Price : {{results[0].price}} ETH</span></h4>
                     <h5> <span *ngIf="results[0]?.free_shipping == 'no'">Shipping : {{results[0].shipping_charges}}
-                            WEI</span> <span *ngIf="results[0]?.free_shipping == 'yes'"> Free Shipping</span></h5>
+                            ETH</span> <span *ngIf="results[0]?.free_shipping == 'yes'"> Free Shipping</span></h5>
                 </div>
                 <div class="product-detail">
                     <h2><i>About This Item:</i></h2>

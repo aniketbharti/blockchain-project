@@ -22,7 +22,7 @@ export class MyOrdersComponent implements OnInit {
     { field: "shipping", headerName: "Address", sortable: true, filter: true, resizable: true },
     {
       field: "partial_payment", headerName: "Pay Remaining", sortable: true, filter: true, resizable: true, cellRenderer: (params: any) => {
-        const status = params.data.payment == 'Full';
+        const status = params.data.payment == 'Full' || params.data.payment == 'Refund';
         if (status)
           return ''
         const ele = document.createElement('p')

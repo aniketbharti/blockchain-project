@@ -99,6 +99,14 @@ export class EtheriumService {
     })
   }
 
+  refund(buyerAddress: string, orderid: string, sellerAddress: string, partial_amount: string) {
+    return this.contract.methods.refund(buyerAddress, orderid).send({
+      from: sellerAddress,
+      value: this.weiConverter(partial_amount, "ether"),
+      gas: 3000000
+    })
+  }
+
   async handleWithdraw(address: string) {
     if (this.contract) {
       try {

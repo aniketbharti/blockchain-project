@@ -91,10 +91,13 @@ export class FirebaseService {
     return from(getDocs(q))
   }
 
-
-
   deleteData(id: string) {
     const dataToDelete = doc(this.firestore, 'product', id);
     return from(deleteDoc(dataToDelete))
+  }
+
+  getPartialOrders(){
+    const q = query(this.orderCollection, where("payment", '==', "Partial"));
+    return from(getDocs(q))
   }
 }
