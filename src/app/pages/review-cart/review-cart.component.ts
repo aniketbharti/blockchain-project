@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { DataService } from 'src/app/services/data.service';
+import { EtheriumService } from 'src/app/services/etherium.service';
 import { FirebaseService } from 'src/app/services/firebase.service';
 
 @Component({
@@ -20,7 +21,7 @@ export class ReviewCartComponent implements OnInit {
   results: any;
   address: any;
 
-  constructor(private router: Router, private snackBar: MatSnackBar, private firebaseService: FirebaseService, private dataService: DataService) { }
+  constructor(private router: Router, private etheriumService: EtheriumService, private snackBar: MatSnackBar, private firebaseService: FirebaseService, private dataService: DataService) { }
 
   ngOnInit(): void {
     this.dataService.getUserData().subscribe((res) => {
@@ -51,17 +52,24 @@ export class ReviewCartComponent implements OnInit {
       payment: "Full",
       shipment: "Initiated"
     }
+
     this.firebaseService.placeOrder(data).subscribe((res) => {
-      this.results.cart = []
-      this.results.address = []
-      this.firebaseService.updateUserData(this.results.id, this.results).subscribe((res) => {
-        this.snackBarMessage("Order Placed Successfully")
-        this.router.navigate([`/`]);
+      const data = res.id;
+      let arr: any[] = []
+      this.results.cart.forEach((ele: any) => {
+        arr.push(this.buyItem(ele.seller_id, data, ele.product_id, ele.product_title, (ele.price + ele.shipping_charges).toString(), "1", this.results.user_wallet))
+      })
+      Promise.all(arr).then((resdata) => {
+        console.log(resdata)
+        this.results.cart = []
+        this.results.address = []
+        this.firebaseService.updateUserData(this.results.id, this.results).subscribe((res) => {
+          this.snackBarMessage("Order Placed Successfully")
+          this.router.navigate([`/`]);
+        })
       })
     })
-
   }
-
 
   calculatePrices() {
     this.totalShipping = 0
@@ -75,6 +83,11 @@ export class ReviewCartComponent implements OnInit {
 
   snackBarMessage(message: string, action = '', config?: MatSnackBarConfig) {
     return this.snackBar.open(message, action, config);
+  }
+
+  buyItem(sellerAddress: string, id: string, productId: string, productName: string, price: string, paymentStatus: string, buyerAddress: string) {
+    console.log(sellerAddress, id, productId, productName, price, paymentStatus, buyerAddress)
+    return this.etheriumService.buyProduct(sellerAddress, id, productId, productName, price, paymentStatus, buyerAddress)
   }
 
 }

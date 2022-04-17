@@ -51,7 +51,7 @@ export class ProductDescPageComponent implements OnInit {
   }
 
   getResponse(data: string) {
-    return data.split("-")
+    return data.split("*")
   }
 
 
@@ -66,8 +66,9 @@ export class ProductDescPageComponent implements OnInit {
         shipping_charges: this.results[0].shipping_charges,
         price: this.results[0].price,
         product_quantity: this.results[0].product_quantity,
-        seller_id: this.results[0].user,
-        image: this.results[0].imagePaths[0]
+        seller_id: this.results[0].wallet,
+        image: this.results[0].imagePaths[0],
+        product_id : this.results[0].id
       }
       results.cart.push(data)
       this.firebaseService.updateUserData(results.id, results).subscribe((res) => {

@@ -77,5 +77,11 @@ export class EtheriumService {
     });
   }
 
-  
+  buyProduct(sellerAddress: string, id: string, productId: string, productName: string, price: string, paymentStatus: string, buyerAddress: string) {
+    return this.contract.methods.payForOrder(sellerAddress, id, productId, productName, price, paymentStatus).send({
+      from: buyerAddress,
+      value: this.weiConverter(price, "ether"),
+      gas: 3000000
+    })
+  }
 }

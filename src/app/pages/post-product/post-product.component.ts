@@ -87,6 +87,7 @@ export class PostProductComponent implements OnInit {
         const data = this.postForm.getRawValue()
         data["imagePaths"] = res
         data["user"] = this.userDetails[0].id
+        data["wallet"] = this.userDetails[0]?.user_wallet
         this.firebaseService.addProduct(data).subscribe(res => {
           this.postForm.reset()
           this.selectedFiles = []
