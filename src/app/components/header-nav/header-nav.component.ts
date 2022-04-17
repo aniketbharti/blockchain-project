@@ -6,6 +6,7 @@ import { EtheriumService } from 'src/app/services/etherium.service';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { MessageModalComponent } from '../modal/message.modal.component';
 import { RegisterModalComponent } from '../register-modal/register-modal.component';
+import { SellerBalanceModalComponent } from '../seller-balance-modal/seller-balance.modal.component';
 
 @Component({
   selector: 'app-header-nav',
@@ -30,6 +31,31 @@ export class HeaderNavComponent implements OnInit {
         this.isLogin = true
       }
     })
+  }
+
+  async seller_balance() {
+    const etherdata = await this.etheriumService.connectMetaMask();
+    this.etheriumService.getSellerBalance(etherdata[0]).then((res: any) => {
+      if (res !== undefined) {
+        const dialogRef = this.dialog.open(SellerBalanceModalComponent, {
+          data: { seller_balance: this.etheriumService.convert_to_ether(res) },
+          width: '400px',
+          height: '300px',
+        });
+
+        dialogRef.afterClosed().subscribe(async (result) => {
+          if (result?.event == "seller_balance") {
+            this.etheriumService.handleWithdraw(etherdata[0]).then((res: any) => {
+              if (res !== undefined) {
+                this.snackBarMessage("Successfully Withdrawn Balance", "Ok")
+              } else {
+                alert("Error while Withdrawing")
+              }
+            });
+          }
+        });
+      }
+    });
   }
 
   async login() {

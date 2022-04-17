@@ -1,0 +1,32 @@
+<h4 mat-dialog-title>
+  <mat-toolbar role="toolbar" class="task-header" col>
+    <div class="title-container">
+      <span> Seller Balance</span>
+      <span class="fx-spacer"></span>
+      <button mat-icon-button (click)="closeDialog()">
+        <mat-icon mat-list-icon>close</mat-icon>
+      </button>
+    </div>
+
+  </mat-toolbar>
+</h4>
+<div mat-dialog-content>
+  <div class="container-div">
+    <form [formGroup]="sellerBalanceForm">
+      <div class="form-group">
+        <label for="formGroupExampleInput2">Seller Balance (in Ether)<span class="text-danger">*</span></label>
+        <input type="text" class="form-control" formControlName="seller_wallet" id="formGroupExampleInput2"
+          placeholder="Seller Balance">
+        <div *ngIf="!f.seller_wallet?.valid && (f.seller_wallet?.dirty ||f.seller_wallet?.touched)">
+          <div [hidden]="!f.seller_wallet?.errors?.required" class="text-error text-danger">
+            Balance unavailable
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<mat-dialog-actions align="end" class="padding-bottom">
+  <button mat-button (click)="closeDialog()">Cancel</button>
+  <button mat-button (click)="onSubmit()" cdkFocusInitial>Withdraw Amount</button>
+</mat-dialog-actions>

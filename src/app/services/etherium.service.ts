@@ -14,6 +14,7 @@ export class EtheriumService {
   ABIObj: any;
   contract: any;
   weiConverter: any;
+  etherConverter: any;
 
   constructor(private httpClient: HttpClient, private dataService: DataService) {
     this.execute()
@@ -24,6 +25,7 @@ export class EtheriumService {
       if (window.web3) {
         const web3 = new Web3(window.web3.currentProvider)
         this.weiConverter = web3.utils.toWei
+        this.etherConverter = web3.utils.fromWei
         this.contract = new web3.eth.Contract(data.abi, this.contractAddress)
         window.ethereum.enable();
       } else if (window.ethereum) {
@@ -58,6 +60,10 @@ export class EtheriumService {
     }
   }
 
+  convert_to_ether(amount: string) {
+    return this.etherConverter(amount, "ether")
+  }
+
 
   registerAsSeller(address: string, amount: string) {
     return this.contract.methods.registerUserAsSeller(address).send(
@@ -84,4 +90,35 @@ export class EtheriumService {
       gas: 3000000
     })
   }
+  
+  async handleWithdraw(address: string) {
+    if (this.contract) {
+      try {
+        return await this.contract.methods.withdrawBalance().send({
+          from: address
+        });
+      } catch (err) {
+        console.log("Error Message", err)
+      }
+    }
+  }
+
+  async getSellerBalance(address: string) {
+    if (this.contract) {
+      return await this.contract.methods.getSellerBalance().call({
+        from: address
+      })
+    }
+  }
+
+  async getOrderStatus(address: string, orderId: string) {
+    if (this.contract) {
+      const receipt = await this.contract.methods.getOrderStatus(orderId).send({
+        from: address
+      });
+      console.log("Handle Registration")
+      console.log(receipt)
+    }
+  }
+
 }
