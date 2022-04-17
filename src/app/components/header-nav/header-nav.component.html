@@ -20,7 +20,7 @@
         <li class="nav-item" *ngIf="isLogin">
           <button mat-button [matMenuTriggerFor]="menu">Manage Account</button>
           <mat-menu #menu="matMenu">
-            <button mat-menu-item>My Orders</button>
+            <button mat-menu-item [routerLink]="['/my-orders']">My Orders</button>
             <button mat-menu-item (click)="registerAsSeller()" *ngIf="!userData[0].isSeller">Register as Seller</button>
             <button mat-menu-item [routerLink]="['/my-products']" *ngIf="userData[0].isSeller">My Products</button>
             <button mat-menu-item [routerLink]="['/post-product']" *ngIf="userData[0].isSeller">Post Product For

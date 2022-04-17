@@ -76,15 +76,15 @@ export class FirebaseService {
   }
 
 
-  // deleteData(id: string) {
-  //   const dataToDelete = doc(this.firestore, 'users', id);
-  //   deleteDoc(dataToDelete)
-  //     .then(() => {
-  //       alert('Data Deleted');
-  //       this.getData()
-  //     })
-  //     .catch((err) => {
-  //       alert(err.message)
-  //     })
-  // }
+  getMyOrders(data: string) {
+    const q = query(this.orderCollection, where("userId", '==', data));
+    return from(getDocs(q))
+  }
+
+
+
+  deleteData(id: string) {
+    const dataToDelete = doc(this.firestore, 'product', id);
+    return from(deleteDoc(dataToDelete))
+  }
 }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { DataService } from 'src/app/services/data.service';
 import { FirebaseService } from 'src/app/services/firebase.service';
 
@@ -17,23 +18,46 @@ export class MyProductsComponent implements OnInit {
     { field: "price", headerName: "Price (WEI)", sortable: true, filter: true, resizable: true },
     { field: "product_quantity", headerName: "Quantity", sortable: true, filter: true, resizable: true },
     { field: "shipping_charges", headerName: "Shipping (WEI)", sortable: true, filter: true, resizable: true },
-    { field: "Delete" }
+    {
+      field: "Delete", cellRenderer: (params: any) => {
+        const ele = document.createElement('p')
+        ele.addEventListener('click', this.deleteProduct.bind(this, params.data.id))
+        ele.innerText = "Delete"
+        return ele
+      }
+    }
   ];
 
   rowData: any[] = [];
+  userData: any;
 
-  constructor(private fireBaseService: FirebaseService, private dataService: DataService) { }
+  constructor(private snackBar: MatSnackBar, private fireBaseService: FirebaseService, private dataService: DataService) { }
 
   ngOnInit(): void {
     this.dataService.getUserData().subscribe((res) => {
-      this.fireBaseService.getMyProduct(res[0].id).subscribe((res) => {
-        const results = res.docs.map((docs: any) => {
-          return { id: docs.id, ...docs.data() }
-        })
-
-        this.rowData = results
-      })
+      this.userData = res[0]
+      this.getData()
     })
+  }
+
+  deleteProduct(id: string) {
+    this.fireBaseService.deleteData(id).subscribe((res) => {
+      this.getData()
+      this.snackBarMessage("Deleted Sucessfully")
+    })
+  }
+
+  getData() {
+    this.fireBaseService.getMyProduct(this.userData.id).subscribe((res) => {
+      const results = res.docs.map((docs: any) => {
+        return { id: docs.id, ...docs.data() }
+      })
+      this.rowData = results
+    })
+  }
+
+  snackBarMessage(message: string, action = '', config?: MatSnackBarConfig) {
+    return this.snackBar.open(message, action, config);
   }
 
 

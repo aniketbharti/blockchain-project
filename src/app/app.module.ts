@@ -37,6 +37,7 @@ import { ReviewCartComponent } from './pages/review-cart/review-cart.component';
 import { MyProductsComponent } from './pages/my-products/my-products.component';
 import { AgGridModule } from 'ag-grid-angular';
 import { HttpClientModule } from '@angular/common/http';
+import { MyOrdersComponent } from './pages/my-orders/my-orders.component';
 
 @NgModule({
   declarations: [
@@ -59,7 +60,8 @@ import { HttpClientModule } from '@angular/common/http';
     CartItemsComponent,
     ShippingPageComponent,
     ReviewCartComponent,
-    MyProductsComponent
+    MyProductsComponent,
+    MyOrdersComponent
   ],
   imports: [
     BrowserModule,
