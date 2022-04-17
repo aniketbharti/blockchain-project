@@ -55,6 +55,11 @@ export class FirebaseService {
     return from(getDocs(q))
   }
 
+  searchSpecificOrder(id: string) {
+    const q = query(this.orderCollection, where(documentId(), '==', id))
+    return from(getDocs(q))
+  }
+
   similarProduct(field: string) {
     const q = query(this.productCollection, where("product_subcategory", '==', field))
     return from(getDocs(q))
@@ -62,6 +67,11 @@ export class FirebaseService {
 
   updateUserData(id: string, data: any) {
     const dataToUpdate = doc(this.firestore, 'users', id);
+    return from(updateDoc(dataToUpdate, data))
+  }
+
+  updateOrder(id: string, data: any) {
+    const dataToUpdate = doc(this.firestore, 'orders', id);
     return from(updateDoc(dataToUpdate, data))
   }
 

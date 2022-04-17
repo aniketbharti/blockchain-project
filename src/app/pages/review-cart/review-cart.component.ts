@@ -27,8 +27,10 @@ export class ReviewCartComponent implements OnInit {
   ngOnInit(): void {
     this.mode = this.activatedRoute.snapshot.queryParams["mode"]
     this.dataService.getUserData().subscribe((res) => {
-      this.userData = res
-      this.getData()
+      if (res) {
+        this.userData = res
+        this.getData()
+      }
     })
   }
 
@@ -57,7 +59,7 @@ export class ReviewCartComponent implements OnInit {
   placeOrder() {
     const data = {
       product: [...this.results.cart],
-      shipping: [...this.results.address],
+      shipping: [this.address],
       totalProduct: this.totalProduct,
       totalShipping: this.totalShipping,
       totalPrice: this.totalPrice,
@@ -88,8 +90,8 @@ export class ReviewCartComponent implements OnInit {
 
   placePartialOrder() {
     const data = {
-      product: [...this.results.cart],
-      shipping: [...this.results.address],
+      product: [...this.results.partial_cart],
+      shipping: [this.address],
       totalProduct: this.totalProduct,
       totalShipping: this.totalShipping,
       totalPrice: this.totalPrice,
@@ -99,12 +101,9 @@ export class ReviewCartComponent implements OnInit {
       buyerWaller: this.results.user_wallet,
       partial_amount: this.results.partial_cart[0].partial_amount
     }
-    debugger
-
     this.firebaseService.placeOrder(data).subscribe((res) => {
       const data = res.id;
       let arr: any[] = []
-      debugger;
       this.results.partial_cart.forEach((ele: any) => {
         arr.push(this.buyPartial(ele.seller_id, data, ele.product_id, ele.product_title, (ele.price + ele.shipping_charges).toString(), "1", this.results.user_wallet, this.results.partial_cart[0].partial_amount.toString()))
       })
