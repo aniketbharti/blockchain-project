@@ -68,25 +68,32 @@ export class ReviewCartComponent implements OnInit {
       shipment: "Initiated",
       buyerWaller: this.results.user_wallet
     }
-
     this.firebaseService.placeOrder(data).subscribe((res) => {
       const data = res.id;
       let arr: any[] = []
+      let arr2: any[] = []
       this.results.cart.forEach((ele: any) => {
-        this.buyItem(ele.seller_id, data, ele.product_id, ele.product_title, (ele.price + ele.shipping_charges).toString(), "0", this.results.user_wallet).then((res: any) => {
-          if (res !== undefined) {
-            arr.push(res)
-          }
-        })
-
+        arr2.push(this.firebaseService.searchSpecificProductPromise(ele.product_id))
+        arr.push(this.buyItem(ele.seller_id, data, ele.product_id, ele.product_title, (ele.price + ele.shipping_charges).toString(), "0", this.results.user_wallet))
       })
       Promise.all(arr).then((resdata) => {
-        console.log(resdata)
         this.results.cart = []
         this.results.address = []
-        this.firebaseService.updateUserData(this.results.id, this.results).subscribe((res) => {
-          this.snackBarMessage("Order Placed Successfully")
-          this.router.navigate([`/`]);
+        Promise.all(arr2).then((res) => {
+          let updateArr: any[] = []
+          res.forEach((data) => {
+            const results = data.docs.map((docs: any) => {
+              return { id: docs.id, ...docs.data() }
+            })[0]
+            results.product_quantity = 0
+            updateArr.push(this.firebaseService.updateProduct(results.id, results))
+          })
+          Promise.resolve(updateArr).then((res) => {
+            this.firebaseService.updateUserData(this.results.id, this.results).subscribe((res) => {
+              this.snackBarMessage("Order Placed Successfully")
+              this.router.navigate([`/`]);
+            })
+          })
         })
       })
     })
@@ -109,19 +116,29 @@ export class ReviewCartComponent implements OnInit {
     this.firebaseService.placeOrder(data).subscribe((res) => {
       const data = res.id;
       let arr: any[] = []
+      let arr2: any[] = []
       this.results.partial_cart.forEach((ele: any) => {
-        this.buyPartial(ele.seller_id, data, ele.product_id, ele.product_title, (ele.price + ele.shipping_charges).toString(), "1", this.results.user_wallet, this.results.partial_cart[0].partial_amount.toString()).then((res: any) => {
-          if (res !== undefined) {
-            arr.push(res)
-          }
-        })
+        arr2.push(this.firebaseService.searchSpecificProductPromise(ele.product_id))
+        arr.push(this.buyPartial(ele.seller_id, data, ele.product_id, ele.product_title, (ele.price + ele.shipping_charges).toString(), "1", this.results.user_wallet, this.results.partial_cart[0].partial_amount.toString()))
       })
       Promise.all(arr).then((resdata) => {
         this.results.partial_cart = []
         this.results.address = []
-        this.firebaseService.updateUserData(this.results.id, this.results).subscribe((res) => {
-          this.snackBarMessage("Order Placed Successfully")
-          this.router.navigate([`/`]);
+        Promise.all(arr2).then((res) => {
+          let updateArr: any[] = []
+          res.forEach((data) => {
+            const results = data.docs.map((docs: any) => {
+              return { id: docs.id, ...docs.data() }
+            })[0]
+            results.product_quantity = 0
+            updateArr.push(this.firebaseService.updateProduct(results.id, results))
+          })
+          Promise.resolve(updateArr).then((res) => {
+            this.firebaseService.updateUserData(this.results.id, this.results).subscribe((res) => {
+              this.snackBarMessage("Order Placed Successfully")
+              this.router.navigate([`/`]);
+            })
+          })
         })
       })
     })

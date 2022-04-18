@@ -25,19 +25,25 @@
                 </div>
                 <div class="purchase-info">
                     <div style="display: flex; flex-wrap: wrap;">
-                        <div class="margin-class">
-                            <input type="number" min="0" value="1" value="1" disabled />
-                        </div>
-                        <div class="margin-class">
-                            <button type="button" class="btn" (click)="addToCart()">
-                                Add to Cart <i class="fas fa-shopping-cart"></i>
-                            </button>
-                        </div>
-                        <div class="margin-class" *ngIf="results[0]?.partial_payment == 'yes'">
-                            <button type="button" class="btn" (click)="addToParitial()">
-                                Book with Token Amount <i class="fas fa-shopping-cart"></i>
-                            </button>
-                        </div>
+                        <ng-container *ngIf="results[0]?.product_quantity >= 1; else loggedOut">
+
+                            <div class="margin-class">
+                                <input type="number" min="0" value="1" value="1" disabled />
+                            </div>
+                            <div class="margin-class">
+                                <button type="button" class="btn" (click)="addToCart()">
+                                    Add to Cart <i class="fas fa-shopping-cart"></i>
+                                </button>
+                            </div>
+                            <div class="margin-class" *ngIf="results[0]?.partial_payment == 'yes'">
+                                <button type="button" class="btn" (click)="addToParitial()">
+                                    Book with Token Amount <i class="fas fa-shopping-cart"></i>
+                                </button>
+                            </div>
+                        </ng-container>
+                        <ng-template #loggedOut>
+                            <h2>Out of Stock</h2>
+                        </ng-template>
                     </div>
                 </div>
             </div>

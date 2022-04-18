@@ -38,10 +38,8 @@ export class AutosuggestSearchComponent implements OnInit {
   }
 
   private _filter(value: string): string[] {
-    const filterValue = value ? value.toLowerCase(): '';
-    console.log(this.options)
-    return this.options.filter(option => option[1].toLowerCase().includes(filterValue));
+    const filterValue = value ? value.toLowerCase() : '';
+    return this.options.filter(option => (option[1] || '' ).toLowerCase().includes(filterValue));
   }
-
 
 }
