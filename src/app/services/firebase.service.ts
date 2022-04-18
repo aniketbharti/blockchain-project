@@ -55,6 +55,13 @@ export class FirebaseService {
     return from(getDocs(q))
   }
 
+  searchSpecificProductPromise(id: string) {
+    const q = query(this.productCollection, where(documentId(), '==', id))
+    return getDocs(q)
+  }
+
+
+
   searchSpecificOrder(id: string) {
     const q = query(this.orderCollection, where(documentId(), '==', id))
     return from(getDocs(q))
@@ -63,6 +70,12 @@ export class FirebaseService {
   similarProduct(field: string) {
     const q = query(this.productCollection, where("product_subcategory", '==', field))
     return from(getDocs(q))
+  }
+
+
+  updateProduct(id: string, data: any) {
+    const dataToUpdate = doc(this.firestore, 'product', id);
+    return updateDoc(dataToUpdate, data)
   }
 
   updateUserData(id: string, data: any) {
@@ -101,7 +114,7 @@ export class FirebaseService {
     return from(deleteDoc(dataToDelete))
   }
 
-  getPartialOrders(){
+  getPartialOrders() {
     const q = query(this.orderCollection, where("payment", '==', "Partial"));
     return from(getDocs(q))
   }

@@ -10,7 +10,7 @@ declare let window: any;
 
 export class EtheriumService {
 
-  contractAddress = "0x69DaB36483811Ed39a9545ac709D20e441302808";
+  contractAddress = "0x0A340c47bD193766f24A780f62f8b581b672311b";
   ABIObj: any;
   contract: any;
   weiConverter: any;
@@ -111,7 +111,8 @@ export class EtheriumService {
     if (this.contract) {
       try {
         return await this.contract.methods.withdrawBalance().send({
-          from: address
+          from: address,
+          gas: 3000000
         });
       } catch (err) {
         console.log("Error Message", err)
@@ -122,7 +123,8 @@ export class EtheriumService {
   async getSellerBalance(address: string) {
     if (this.contract) {
       return await this.contract.methods.getSellerBalance().call({
-        from: address
+        from: address,
+        gas: 3000000
       })
     }
   }
@@ -130,7 +132,8 @@ export class EtheriumService {
   async getOrderStatus(address: string, orderId: string) {
     if (this.contract) {
       const receipt = await this.contract.methods.getOrderStatus(orderId).send({
-        from: address
+        from: address,
+        gas: 3000000
       });
       console.log("Handle Registration")
       console.log(receipt)
