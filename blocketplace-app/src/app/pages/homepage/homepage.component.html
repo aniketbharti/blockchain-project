@@ -1,0 +1,31 @@
+<app-main-cousel></app-main-cousel>
+<div class="container">
+    <div class="product-categories">
+        <div class="content" [routerLink]="['/search']" [queryParams]="{search: 'Electronics', field: 'product_category'}">
+            <img class="icon-class" src="assets/icons/electronics.png">
+            <p>Electronics</p>
+        </div>
+        <div class="content" [routerLink]="['/search']" [queryParams]="{search: 'Applicances', field: 'product_category'}">
+            <img class="icon-class" src="assets/icons/appliances.png">
+            <p>Applicances</p>
+        </div>
+        <div class="content" [routerLink]="['/search']" [queryParams]="{search: 'Fashion', field: 'product_category'}">
+            <img class="icon-class" src="assets/icons/fashion.png">
+            <p>Fashion</p>
+        </div>
+        <div class="content" [routerLink]="['/search']" [queryParams]="{search: 'Beauty & Grooming', field: 'product_category'}">
+            <img class="icon-class" src="assets/icons/beauty.png">
+            <span>Beauty & <br> Grooming</span>
+        </div>
+        <div class="content" [routerLink]="['/search']" [queryParams]="{search: 'Furniture', field: 'product_category'}">
+            <img class="icon-class" src="assets/icons/furniture.png">
+            <p>Furniture</p>
+        </div>
+        <div class="content" [routerLink]="['/search']" [queryParams]="{search: 'Home Decor', field: 'product_category'}">
+            <img class="icon-class" src="assets/icons/decor.png">
+            <p>Home Decor</p>
+        </div>
+    </div>
+    <app-product-corousel [courouselData]="recentlyAdded" *ngIf="recentlyAdded.data.length > 0"></app-product-corousel>
+    <app-product-corousel [courouselData]="topTrending" *ngIf="topTrending.data.length > 0"></app-product-corousel>
+</div>

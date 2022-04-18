@@ -1,0 +1,12 @@
+<div class="container-class">
+    <div class="text-center flex-wrap">
+        <h5>{{data.message[0]}}</h5>
+        <ng-container *ngFor="let message of data.message | slice : 1: data.message.Length">
+            <p>{{message}}<br></p>
+        </ng-container>
+        <div class="w-100 mt-3">
+            <button class="btn mr-4" (click)="modalDismiss(button)"
+                *ngFor="let button of data.button">{{button}}</button>
+        </div>
+    </div>
+</div>

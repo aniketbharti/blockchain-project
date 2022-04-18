@@ -131,8 +131,7 @@ export class EtheriumService {
     if (this.contract) {
       try {
         return await this.contract.methods.withdrawBalance().send({
-          from: address,
-          gas: 3000000
+          from: address
         });
       } catch (err) {
         console.log("Error Message", err)
@@ -143,8 +142,7 @@ export class EtheriumService {
   async getSellerBalance(address: string) {
     if (this.contract) {
       return await this.contract.methods.getSellerBalance().call({
-        from: address,
-        gas: 3000000
+        from: address
       })
     }
   }
@@ -152,8 +150,7 @@ export class EtheriumService {
   async getOrderStatus(address: string, orderId: string) {
     if (this.contract) {
       const receipt = await this.contract.methods.getOrderStatus(orderId).send({
-        from: address,
-        gas: 3000000
+        from: address
       });
       console.log("Handle Registration")
       console.log(receipt)

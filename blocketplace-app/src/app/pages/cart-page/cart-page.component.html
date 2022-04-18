@@ -1,0 +1,53 @@
+<div class="heading-class">
+    <h2 *ngIf="mode != 'partial'; else loggedOut">
+        Shopping Cart
+    </h2>
+    <ng-template #loggedOut>
+        <h2>Book a Item</h2>
+    </ng-template>
+</div>
+<div class="container">
+    <div class="shopping-cart">
+        <div class="row" *ngIf="emptyCart == false">
+            <div class="col-md-8">
+                <app-cart-items *ngIf="cartItems.data.length > 0" [item]="cartItems"
+                    (eventEmitterData)="removeItem($event)">
+                </app-cart-items>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-3 ">
+                <div class="totals card card-class">
+                    <div class="totals-item">
+                        <label>Subtotal Product</label>
+                        <div class="totals-value" id="cart-subtotal">{{totalProduct}} ETH</div>
+                    </div>
+                    <div class="totals-item">
+                        <label>Shipping</label>
+                        <div class="totals-value" id="cart-shipping" *ngIf= "totalShipping > 0; else free">{{totalShipping}} ETH</div>
+                        <ng-template #free>
+                            <div class="totals-value" id="cart-shipping"> Free </div>
+                        </ng-template>
+                    </div>
+                    <div class="totals-item totals-item-total">
+                        <label>Grand Total</label>
+                        <div class="totals-value" id="cart-total">{{totalPrice}} ETH</div>
+                    </div>
+                    <div class="totals-item text-danger" *ngIf="mode == 'partial'">
+                        <label>Partial Token</label>
+                        <div class="totals-value" id="cart-total"> - {{cartItems.data[0].partial_amount}} ETH</div>
+                    </div>
+                    <div class="totals-item text-primary" *ngIf="mode == 'partial'">
+                        <label>Amount Left</label>
+                        <div class="totals-value" id="cart-total">{{totalPrice - cartItems.data[0].partial_amount}} ETH</div>
+                    </div>
+                    <button class="checkout" (click)="checkOut()">Checkout</button>
+                </div>
+            </div>
+        </div>
+        <div class="card" style="width: 100%; height: 100%; padding: 30px;" *ngIf="emptyCart">
+            <i>
+                <h4>Cart is Empty</h4>
+            </i>
+        </div>
+    </div>
+</div>
