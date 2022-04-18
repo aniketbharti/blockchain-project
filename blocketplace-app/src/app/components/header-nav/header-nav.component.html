@@ -1,0 +1,37 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" [routerLink]="['/']"><img src="assets/logo.png" class="logo" width="140" height="60"></a>
+    <div class="width-class">
+      <app-autosuggest-search></app-autosuggest-search>
+    </div>
+    <button class="navbar-toggler" [ngClass]="{'collapsed': toggleCollapseNavBar ==  false }" type="button"
+      data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false"
+      aria-label="Toggle navigation" (click)="toggleCollapseNavBar = !toggleCollapseNavBar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <button mat-button [routerLink]="['/cart']">Cart</button>
+        </li>
+        <li class="nav-item">
+          <button mat-button (click)="login()" *ngIf="!isLogin">Login</button>
+        </li>
+        <li class="nav-item" *ngIf="isLogin">
+          <button mat-button [matMenuTriggerFor]="menu">Manage Account</button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item [routerLink]="['/my-orders']">My Orders</button>
+            <button mat-menu-item (click)="registerAsSeller()" *ngIf="!userData[0].isSeller">Register as Seller</button>
+            <button mat-menu-item [routerLink]="['/my-products']" *ngIf="userData[0].isSeller">My Products</button>
+            <button mat-menu-item [routerLink]="['/post-product']" *ngIf="userData[0].isSeller">Post Product For
+              Sell</button>
+            <button mat-menu-item [routerLink]="['/refund']" *ngIf="userData[0].isSeller">Refund For Partial
+              Orders</button>
+            <button mat-menu-item (click)="seller_balance()" *ngIf="userData[0].isSeller">Seller Balance</button>
+            <button mat-menu-item (click)="logout()">Logout</button>
+          </mat-menu>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

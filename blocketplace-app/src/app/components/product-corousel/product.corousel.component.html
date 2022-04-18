@@ -1,0 +1,20 @@
+<div class="courousel">
+    <h3>{{courouselData?.heading}}</h3>
+    <ngb-carousel *ngIf="courouselData?.data" [pauseOnHover]="true" [showNavigationIndicators]="false">
+        <ng-template ngbSlide class="col-sm-12" *ngFor="let res of result">
+            <div class="display-class">
+                <div class="card card-div" style="width: 18rem;" *ngFor="let data of res">
+                    <div class="picsum-img-wrapper">
+                        <img class="card-img-top" width="150" height="230" [src]="data.imagePaths[0]">
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-title">{{data.product_title}}</h6>
+                        <p class="card-text">{{ data.product_desc | slice: 0: 50}}</p>
+                    </div>
+                        <button class="btn btn-class margin-class" [routerLink]="['/product-details']"
+                            [queryParams]="{id: data.id}" >View</button>
+                </div>
+            </div>
+        </ng-template>
+    </ngb-carousel>
+</div>
