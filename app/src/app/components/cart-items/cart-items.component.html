@@ -1,0 +1,28 @@
+<div class="column-labels">
+    <label class="product-image">Image</label>
+    <label class="product-details">Product</label>
+    <label class="product-price">Price</label>
+    <label class="product-quantity">Quantity</label>
+    <label class="product-removal">Remove</label>
+    <label class="product-line-price">Total</label>
+</div>
+<div class="product" *ngFor="let i of item['data']">
+    <div class="product-image">
+        <img [src]="i.image">
+    </div>
+    <div class="product-details">
+        <div class="product-title">{{i.product_title}}</div>
+        <p class="product-description">{{i.product_desc}}</p>
+    </div>
+    <div class="product-price"><span>Price: {{i.price}} WEI</span> <br><span>Shipping: {{i.shipping_charges}} WEI</span>
+    </div>
+    <div class="product-quantity">
+        <input type="number" disabled [(ngModel)]="i.product_quantity">
+    </div>
+    <div class="product-removal">
+        <button class="remove-product" (click)="removeItem(i)" *ngIf="item.removeButtonDisplay">
+            Remove
+        </button>
+    </div>
+    <div class="product-line-price">{{calculateTotal(i.price, i.shipping_charges, i.product_quantity)}}</div>
+</div>

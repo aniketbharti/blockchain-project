@@ -1,0 +1,25 @@
+.form-width {
+  width: 50%;
+}
+
+.navbar-brand {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.navbar {
+  height: 65px;
+}
+.width-class {
+  width: 65%;
+}
+
+@media screen and (max-width: 30em) { 
+  .width-class{
+    width: 46% !important;
+  }
+  .logo{
+    width: 75px;
+    height: 50px;
+  }
+ }

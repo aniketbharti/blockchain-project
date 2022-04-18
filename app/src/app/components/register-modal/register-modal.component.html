@@ -1,0 +1,72 @@
+<h4 mat-dialog-title>
+    <mat-toolbar role="toolbar" class="task-header" col>
+        <div class="title-container">
+            <span> Register</span>
+            <span class="fx-spacer"></span>
+            <button mat-icon-button (click)="closeDialog()">
+                <mat-icon mat-list-icon>close</mat-icon>
+            </button>
+        </div>
+
+    </mat-toolbar>
+</h4>
+<div mat-dialog-content>
+    <div class="container-div">
+        <form [formGroup]="registerForm">
+            <div class="form-group">
+                <label for="formGroupExampleInput">Name<span class="text-danger">*</span></label>
+                <input type="text" class="form-control" formControlName="name" id="formGroupExampleInput" placeholder="Enter Your Name">
+                <div *ngIf="!f.name?.valid && (f.name?.dirty || f.name?.touched)">
+                    <div [hidden]="!f.name.errors?.required" class="text-error text-danger">
+                        First Name is required
+                    </div>
+                    <div [hidden]="!f.name.errors?.minlength" class="text-error text-danger">
+                        Min Length is 10
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="formGroupExampleInput2">Email<span class="text-danger">*</span></label>
+                <input type="email" class="form-control" formControlName="email" id="formGroupExampleInput2" placeholder="Enter Your Email">
+                <div *ngIf="!f.email?.valid && (f.email?.dirty ||f.email?.touched)">
+                    <div [hidden]="!f.email.errors?.required" class="text-error text-danger">
+                        Email is required
+                    </div>
+                    <div [hidden]="!f.email.errors?.email" class="text-error text-danger">
+                        Please check your email
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="formGroupExampleInput2">Phone<span class="text-danger">*</span></label>
+                <input type="number" class="form-control" id="formGroupExampleInput2"
+                    placeholder="Enter Your Phone Number" formControlName="phone" >
+                <div *ngIf="!f.phone?.valid && (f.phone?.dirty ||f.phone?.touched)">
+                    <div [hidden]="!f.phone.errors?.required" class="text-error text-danger">
+                        Phone Number is required
+                    </div>
+                    <div [hidden]="!f.phone.errors?.min" class="text-error text-danger">
+                        Please check your phone number
+                    </div>
+                    <div [hidden]="!f.phone.errors?.max" class="text-error text-danger">
+                        Please check your phone number
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="formGroupExampleInput2">Account<span class="text-danger">*</span></label>
+                <input type="text" class="form-control" formControlName="user_wallet" id="formGroupExampleInput2" placeholder="User Wallet Account">
+                <div *ngIf="!f.user_wallet?.valid && (f.user_wallet?.dirty ||f.user_wallet?.touched)">
+                    <div [hidden]="!f.user_wallet?.errors?.required" class="text-error text-danger">
+                        Account Number is required
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+<mat-dialog-actions align="end" class="padding-bottom">
+    <button mat-button (click)="closeDialog()">Cancel</button>
+    <button mat-button (click)="onSubmit()" cdkFocusInitial>Register</button>
+</mat-dialog-actions>

@@ -1,0 +1,14 @@
+<form>
+    <div class="example-full-width">
+        <div class="input-group input-group mb-3 mt-3">
+            <input type="text" class="form-control" aria-label="Small" [formControl]="myControl"
+                [matAutocomplete]="auto">
+        </div>
+        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+            <mat-option *ngFor="let option of filteredOptions | async" [value]="option[1]" [routerLink]="['/search']"
+                [queryParams]="{search: option[1], field: option[0] }">
+                {{option[1]}}
+            </mat-option>
+        </mat-autocomplete>
+    </div>
+</form>
