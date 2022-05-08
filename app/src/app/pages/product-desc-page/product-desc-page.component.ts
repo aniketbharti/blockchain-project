@@ -112,7 +112,10 @@ export class ProductDescPageComponent implements OnInit {
 
   }
 
-  snackBarMessage(message: string, action = '', config?: MatSnackBarConfig) {
+  snackBarMessage(message: string, action = '') {
+    const config = {
+      duration: 3000
+    }
     return this.snackBar.open(message, action, config);
   }
 }

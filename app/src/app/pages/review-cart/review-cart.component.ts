@@ -155,7 +155,10 @@ export class ReviewCartComponent implements OnInit {
     this.totalPrice = this.totalProduct + this.totalShipping
   }
 
-  snackBarMessage(message: string, action = '', config?: MatSnackBarConfig) {
+  snackBarMessage(message: string, action = '') {
+    const config = {
+      duration: 3000
+    }
     return this.snackBar.open(message, action, config);
   }
 

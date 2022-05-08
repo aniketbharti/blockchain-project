@@ -106,7 +106,10 @@ export class PostProductComponent implements OnInit {
     return this.postForm?.controls
   }
 
-  snackBarMessage(message: string, action = '', config?: MatSnackBarConfig) {
+  snackBarMessage(message: string, action = '') {
+    const config = {
+      duration: 3000
+    }
     return this.snackBar.open(message, action, config);
   }
 

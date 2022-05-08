@@ -121,7 +121,6 @@ export class HeaderNavComponent implements OnInit {
       if (res == "Ok") {
         this.etheriumService.registerAsSeller(this.userData[0].user_wallet, "0.5").then((res1: any) => {
           if (res !== undefined) {
-            console.log(res1)
             this.firebaseService.checkUserExists(this.userData[0].user_wallet).subscribe((res) => {
               const results = res.docs.map((docs: any) => {
                 return { id: docs.id, ...docs.data() }
@@ -140,7 +139,10 @@ export class HeaderNavComponent implements OnInit {
     })
   }
 
-  snackBarMessage(message: string, action = '', config?: MatSnackBarConfig) {
+  snackBarMessage(message: string, action = '') {
+    const config = {
+      duration: 3000
+    }
     return this.snackBar.open(message, action, config);
   }
 
@@ -158,14 +160,32 @@ export class HeaderNavComponent implements OnInit {
 
   checkAllowance() {
     this.etheriumService.checkAllowance(this.userData[0].user_wallet).then((res) => {
-      console.log(res)
+      this.dialog.open(MessageModalComponent, {
+        data: {
+          message: ['Balance', 'Your Allowance Remaining is ' + (res / Math.pow(10, 18)) + ' BKT'],
+          button: ["Ok", "Cancel"]
+        },
+        width: '350px',
+        height: '150px'
+      })
     })
   }
 
-  checkBalance(){
-    this.etheriumService.getTokenBalance(this.userData[0].user_wallet).then((res:any) => {
-      console.log(res)
+  checkBalance() {
+    this.etheriumService.getTokenBalance(this.userData[0].user_wallet).then((res: any) => {
+      this.dialog.open(MessageModalComponent, {
+        data: {
+          message: ['Balance', 'Your Balance is ' + (res / Math.pow(10, 18)) + ' BKT'],
+          button: ["Ok", "Cancel"]
+        },
+        width: '300px',
+        height: '150px'
+      })
     })
   }
+
+
 
 }
+
+
