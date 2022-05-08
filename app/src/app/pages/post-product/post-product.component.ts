@@ -34,9 +34,7 @@ export class PostProductComponent implements OnInit {
     });
     this.isShipping = this.postForm.get("free_shipping")?.value
     this.postForm.get("free_shipping")?.valueChanges.subscribe(selectedValue => {
-      console.log('address changed')
       this.isShipping = selectedValue
-      console.log(selectedValue)
     })
   }
 
@@ -91,6 +89,11 @@ export class PostProductComponent implements OnInit {
         data["timestamp"] = Math.floor(Date.now() / 1000)
         this.firebaseService.addProduct(data).subscribe(res => {
           this.postForm.reset()
+          this.postForm.get("partial_payment")?.patchValue("no");
+          this.postForm.get("free_shipping")?.patchValue("no");
+          this.postForm.get("free_shipping")?.patchValue("no");
+          this.postForm.get("product_quantity")?.patchValue("1");
+          
           this.selectedFiles = []
           this.snackBarMessage("Product Added")
         })

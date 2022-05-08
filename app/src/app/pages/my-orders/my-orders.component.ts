@@ -35,10 +35,11 @@ export class MyOrdersComponent implements OnInit {
 
   rowData: any[] = [];
   userData: any;
-
+  showNoData = false;
   constructor(private etheriumService: EtheriumService, private snackBar: MatSnackBar, private fireBaseService: FirebaseService, private dataService: DataService, private dialog: MatDialog) { }
 
   ngOnInit(): void {
+
     this.dataService.getUserData().subscribe((res) => {
       this.userData = res
       this.getData()
@@ -52,6 +53,9 @@ export class MyOrdersComponent implements OnInit {
       const results = res.docs.map((docs: any) => {
         return { id: docs.id, ...docs.data() }
       })
+      if (results.length == 0) {
+        this.showNoData = true
+      }
       results.forEach((ele) => {
         ele["partial_amount"] = ele?.partial_amount ? ele.partial_amount : 'NA'
         ele["shipping"] = (ele.shipping.length) > 0 ? `${ele.shipping[0]["name"]},${ele.shipping[0]["addr1"]},${ele.shipping[0]["city"]},${ele.shipping[0]["state"]}${ele.shipping[0]["country"]},${ele.shipping[0]["zip"]}` : ''

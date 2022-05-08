@@ -29,6 +29,7 @@ export class PartialRefundComponent implements OnInit {
 
   ];
   userData: any;
+  showNoData: boolean = false;
 
   constructor(private snackBar: MatSnackBar, private fireBaseService: FirebaseService, private userDataService: DataService, private etheriumService: EtheriumService) { }
   rowData: any[] = []
@@ -46,6 +47,10 @@ export class PartialRefundComponent implements OnInit {
       let results = res.docs.map((docs: any) => {
         return { id: docs.id, ...docs.data() }
       })
+      if (results.length == 0) {
+        this.showNoData = true
+      }
+
       const datalist: any[] = []
       results.forEach((ele) => {
         const data = {

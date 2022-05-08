@@ -22,23 +22,23 @@
                 <div class="totals card card-class">
                     <div class="totals-item">
                         <label>Subtotal Product</label>
-                        <div class="totals-value" id="cart-subtotal">{{totalProduct}} WEI</div>
+                        <div class="totals-value" id="cart-subtotal">{{totalProduct}} BKT</div>
                     </div>
                     <div class="totals-item">
                         <label>Shipping</label>
-                        <div class="totals-value" id="cart-shipping">{{totalShipping}} WEI</div>
+                        <div class="totals-value" id="cart-shipping">{{totalShipping}} BKT</div>
                     </div>
                     <div class="totals-item totals-item-total">
                         <label>Grand Total</label>
-                        <div class="totals-value" id="cart-total">{{totalPrice}} WEI</div>
+                        <div class="totals-value" id="cart-total">{{totalPrice}} BKT</div>
                     </div>
                     <div class="totals-item text-danger" *ngIf="mode == 'partial'">
                         <label>Partial Token</label>
-                        <div class="totals-value" id="cart-total"> - {{cartItems.data[0].partial_amount}} ETH</div>
+                        <div class="totals-value" id="cart-total"> - {{cartItems.data[0].partial_amount}} BKT</div>
                     </div>
                     <div class="totals-item text-primary" *ngIf="mode == 'partial'">
                         <label>Amount Left</label>
-                        <div class="totals-value" id="cart-total">{{totalPrice - cartItems.data[0].partial_amount}} ETH
+                        <div class="totals-value" id="cart-total">{{totalPrice - cartItems.data[0].partial_amount}} BKT
                         </div>
                     </div>
                     <button class="checkout" (click)="placeOrder()" *ngIf="mode != 'partial'; else loggedOut">Place

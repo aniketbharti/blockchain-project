@@ -35,6 +35,7 @@ export class CartPageComponent implements OnInit {
       this.results = res.docs.map((docs: any) => {
         return { id: docs.id, ...docs.data() }
       })[0]
+      
       if (!(this.mode == 'partial')) {
         this.cartItems.data = this.results.cart;
         if (this.cartItems.data.length > 0) {

@@ -15,9 +15,9 @@ export class MyProductsComponent implements OnInit {
     { field: "product_category", headerName: "Product Category", sortable: true, filter: true, resizable: true },
     { field: "product_subcategory", headerName: "Product Sub Category", sortable: true, filter: true, resizable: true },
     { field: "condition", headerName: "Condition", sortable: true, filter: true, resizable: true },
-    { field: "price", headerName: "Price (WEI)", sortable: true, filter: true, resizable: true },
+    { field: "price", headerName: "Price (BKT)", sortable: true, filter: true, resizable: true },
     { field: "product_quantity", headerName: "Quantity", sortable: true, filter: true, resizable: true },
-    { field: "shipping_charges", headerName: "Shipping (WEI)", sortable: true, filter: true, resizable: true },
+    { field: "shipping_charges", headerName: "Shipping (BKT)", sortable: true, filter: true, resizable: true },
     {
       field: "Delete", cellRenderer: (params: any) => {
         const ele = document.createElement('p')
@@ -30,6 +30,7 @@ export class MyProductsComponent implements OnInit {
 
   rowData: any[] = [];
   userData: any;
+  showNoData: boolean = false;
 
   constructor(private snackBar: MatSnackBar, private fireBaseService: FirebaseService, private dataService: DataService) { }
 
@@ -53,6 +54,9 @@ export class MyProductsComponent implements OnInit {
         return { id: docs.id, ...docs.data() }
       })
       this.rowData = results
+      if (results.length == 0) {
+        this.showNoData = true
+      }
     })
   }
 
