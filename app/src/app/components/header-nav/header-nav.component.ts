@@ -18,6 +18,7 @@ export class HeaderNavComponent implements OnInit {
   isLogin: boolean = false;
   toggleCollapseNavBar = false;
   userData: any;
+  approvalAmount = 10000;
 
   constructor(private snackBar: MatSnackBar, private etheriumService: EtheriumService, private dataService: DataService, private firebaseService: FirebaseService, private dialog: MatDialog) { }
 
@@ -81,19 +82,23 @@ export class HeaderNavComponent implements OnInit {
           if (result?.event == "register") {
             this.etheriumService.registerUser(etherdata[0]).then((res: any) => {
               if (res !== undefined) {
-                this.firebaseService.registerNewUser(result.data).subscribe((res: any) => {
-                  this.firebaseService.checkUserExists(etherdata[0]).subscribe((res) => {
-                    this.userData = res.docs.map((docs: any) => {
-                      return { id: docs.id, ...docs.data() }
+                this.etheriumService.approve(etherdata[0], this.approvalAmount).then((res) => {
+                  this.firebaseService.registerNewUser(result.data).subscribe((res: any) => {
+                    this.firebaseService.checkUserExists(etherdata[0]).subscribe((res) => {
+                      this.userData = res.docs.map((docs: any) => {
+                        return { id: docs.id, ...docs.data() }
+                      })
+                      this.dataService.setUserData(this.userData)
                     })
-                    this.dataService.setUserData(this.userData)
+                  }, (err: any) => {
+                    console.log(err)
                   })
-                }, (err: any) => {
-                  console.log(err)
+                }).catch((err: any) => {
+                  alert("Error while Approving ...")
                 })
-              } else {
-                alert("Error while Registering ...")
               }
+            }).catch((err: any) => {
+              alert("Error while Registering ...")
             })
           }
         });

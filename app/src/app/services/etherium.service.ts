@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import Web3 from "web3";
-import { HttpClient } from '@angular/common/http';
 import { DataService } from './data.service';
+import blocketplace from "../../assets/Blocketplace.json";
+import token from "../../assets/BlocketPlaceToken.json";
 
 declare let window: any;
 @Injectable({
@@ -10,33 +11,36 @@ declare let window: any;
 
 export class EtheriumService {
 
-  contractAddress = "0x0A340c47bD193766f24A780f62f8b581b672311b";
+  marketPlaceAddress = "0x01303045ECeDf3c3538674e6F155eD475014386d";
+  tokenAddress = "0xc56d686fb08378AE8669F986bea5a2c7459bcDA6";
   ABIObj: any;
   contract: any;
   weiConverter: any;
   etherConverter: any;
+  token: any;
 
-  constructor(private httpClient: HttpClient, private dataService: DataService) {
+  constructor(private dataService: DataService) {
     this.execute()
   }
 
   execute() {
-    this.httpClient.get("assets/Blocketplace.json").subscribe((data: any) => {
-      if (window.web3) {
-        const web3 = new Web3(window.web3.currentProvider)
-        this.weiConverter = web3.utils.toWei
-        this.etherConverter = web3.utils.fromWei
-        this.contract = new web3.eth.Contract(data.abi, this.contractAddress)
-        window.ethereum.enable();
-      } else if (window.ethereum) {
-        const web3 = new Web3(window.etherium)
-        this.contract = new web3.eth.Contract(data.abi, this.contractAddress)
-        window.ethereum.enable();
-      } else {
-        console.log("Install Metamask")
-        throw new Error("Install MetaMak")
-      }
-    })
+
+    if (window.web3) {
+      const web3 = new Web3(window.web3.currentProvider)
+      this.weiConverter = web3.utils.toWei
+      this.etherConverter = web3.utils.fromWei
+      this.contract = new web3.eth.Contract(blocketplace.abi as any, this.marketPlaceAddress)
+      this.token = new web3.eth.Contract(token.abi as any, this.tokenAddress)
+      window.ethereum.enable();
+    } else if (window.ethereum) {
+      const web3 = new Web3(window.etherium)
+      this.contract = new web3.eth.Contract(blocketplace.abi as any, this.marketPlaceAddress)
+      this.token = new web3.eth.Contract(token.abi as any, this.tokenAddress)
+      window.ethereum.enable();
+    } else {
+      console.log("Install Metamask")
+      throw new Error("Install MetaMak")
+    }
   }
 
   async connectMetaMask() {
@@ -138,4 +142,10 @@ export class EtheriumService {
     }
   }
 
+  async approve(address: string, approvalamount: number) {
+    return this.token.methods.approve(this.marketPlaceAddress, approvalamount).call({
+      from: address
+    })
+  }
+  
 }
