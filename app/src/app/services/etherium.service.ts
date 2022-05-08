@@ -110,6 +110,15 @@ export class EtheriumService {
     })
   }
 
+
+  buy(address: string, amount: string) {
+    return this.contract.methods.buy().send({
+      from: address,
+      value: this.weiConverter(amount, "ether"),
+      gas: 3000000
+    })
+  }
+
   async handleWithdraw(address: string) {
     if (this.contract) {
       try {
@@ -147,5 +156,5 @@ export class EtheriumService {
       from: address
     })
   }
-  
+
 }

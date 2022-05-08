@@ -4,6 +4,7 @@ import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { DataService } from 'src/app/services/data.service';
 import { EtheriumService } from 'src/app/services/etherium.service';
 import { FirebaseService } from 'src/app/services/firebase.service';
+import { BuyTokenComponent } from '../buy-token/buy-token.component';
 import { MessageModalComponent } from '../modal/message.modal.component';
 import { RegisterModalComponent } from '../register-modal/register-modal.component';
 import { SellerBalanceModalComponent } from '../seller-balance-modal/seller-balance.modal.component';
@@ -140,6 +141,18 @@ export class HeaderNavComponent implements OnInit {
 
   snackBarMessage(message: string, action = '', config?: MatSnackBarConfig) {
     return this.snackBar.open(message, action, config);
+  }
+
+
+  buyToken() {
+    this.dialog.open(BuyTokenComponent, { width: '550px', height: '350px' }).afterClosed().subscribe((res) => {
+      if (res.event == "buy") {
+        this.etheriumService.buy(this.userData[0].user_wallet, res.amount).then((res: any) => {
+          this.snackBarMessage("Token Bought Successfully")
+        })
+        console.log(res)
+      }
+    })
   }
 
 }
