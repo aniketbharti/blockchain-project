@@ -11,8 +11,8 @@ declare let window: any;
 
 export class EtheriumService {
 
-  marketPlaceAddress = "0x01303045ECeDf3c3538674e6F155eD475014386d";
-  tokenAddress = "0xc56d686fb08378AE8669F986bea5a2c7459bcDA6";
+  marketPlaceAddress = "0xA4465DA902500d80632F93d508198d5727e88585";
+  tokenAddress = "0x62dC97c2046EbA262a1263969b3B5535aEC6FcaB";
   ABIObj: any;
   contract: any;
   weiConverter: any;
@@ -151,10 +151,22 @@ export class EtheriumService {
     }
   }
 
-  async approve(address: string, approvalamount: number) {
-    return this.token.methods.approve(this.marketPlaceAddress, approvalamount).call({
+  async approve(address: string, approvalamount: string) {
+    return this.token.methods.approve(this.marketPlaceAddress, this.weiConverter(approvalamount, "ether")).send({
       from: address
     })
   }
 
+
+  async checkAllowance(address: string) {
+    return this.contract.methods.getAllowance(address, this.marketPlaceAddress).call({
+      from: address
+    })
+  }
+
+  getTokenBalance(address: string) {
+    return this.contract.methods.getBalance(address).call({
+      from: address
+    })
+  }
 }

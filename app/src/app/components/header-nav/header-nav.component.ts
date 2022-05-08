@@ -19,7 +19,7 @@ export class HeaderNavComponent implements OnInit {
   isLogin: boolean = false;
   toggleCollapseNavBar = false;
   userData: any;
-  approvalAmount = 10000;
+  approvalAmount = 10;
 
   constructor(private snackBar: MatSnackBar, private etheriumService: EtheriumService, private dataService: DataService, private firebaseService: FirebaseService, private dialog: MatDialog) { }
 
@@ -83,7 +83,7 @@ export class HeaderNavComponent implements OnInit {
           if (result?.event == "register") {
             this.etheriumService.registerUser(etherdata[0]).then((res: any) => {
               if (res !== undefined) {
-                this.etheriumService.approve(etherdata[0], this.approvalAmount).then((res) => {
+                this.etheriumService.approve(etherdata[0], this.approvalAmount.toString()).then((res) => {
                   this.firebaseService.registerNewUser(result.data).subscribe((res: any) => {
                     this.firebaseService.checkUserExists(etherdata[0]).subscribe((res) => {
                       this.userData = res.docs.map((docs: any) => {
@@ -95,6 +95,7 @@ export class HeaderNavComponent implements OnInit {
                     console.log(err)
                   })
                 }).catch((err: any) => {
+                  console.log(err)
                   alert("Error while Approving ...")
                 })
               }
@@ -152,6 +153,18 @@ export class HeaderNavComponent implements OnInit {
         })
         console.log(res)
       }
+    })
+  }
+
+  checkAllowance() {
+    this.etheriumService.checkAllowance(this.userData[0].user_wallet).then((res) => {
+      console.log(res)
+    })
+  }
+
+  checkBalance(){
+    this.etheriumService.getTokenBalance(this.userData[0].user_wallet).then((res:any) => {
+      console.log(res)
     })
   }
 
