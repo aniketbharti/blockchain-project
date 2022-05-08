@@ -1,0 +1,42 @@
+<h4 mat-dialog-title>
+    <mat-toolbar role="toolbar" class="task-header" col>
+        <div class="title-container">
+            <span> Air Drop</span>
+            <span class="fx-spacer"></span>
+            <button mat-icon-button (click)="closeDialog()">
+                <mat-icon mat-list-icon>close</mat-icon>
+            </button>
+        </div>
+    </mat-toolbar>
+</h4>
+<div mat-dialog-content>
+    <div class="container-div">
+        <p><b><i>My Balance : {{ balance | async}}</i></b></p>
+        <form [formGroup]="buyForm">
+            <div class="form-group">
+                <label for="formGroupExampleInput">Address :<span class="text-danger">*</span></label>
+                <input type="text" class="form-control" formControlName="address" id="formGroupExampleInput"
+                    placeholder="Enter Address">
+                <div *ngIf="!f.address?.valid && (f.address?.dirty || f.address?.touched)">
+                    <div [hidden]="!f.address.errors?.required" class="text-error text-danger">
+                        Address is required
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="formGroupExampleInput">Amount<span class="text-danger">*</span></label>
+                <input type="text" class="form-control" formControlName="amount" id="formGroupExampleInput"
+                    placeholder="Enter Amount to Buy">
+                <div *ngIf="!f.amount?.valid && (f.amount?.dirty || f.amount?.touched)">
+                    <div [hidden]="!f.amount.errors?.required" class="text-error text-danger">
+                        Amount is required
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<mat-dialog-actions align="end" class="padding-bottom">
+    <button mat-button (click)="closeDialog()">Cancel</button>
+    <button mat-button (click)="onSubmit()" cdkFocusInitial>Send</button>
+</mat-dialog-actions>

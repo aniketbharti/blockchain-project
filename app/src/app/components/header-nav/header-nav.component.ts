@@ -4,6 +4,8 @@ import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { DataService } from 'src/app/services/data.service';
 import { EtheriumService } from 'src/app/services/etherium.service';
 import { FirebaseService } from 'src/app/services/firebase.service';
+import { environment } from 'src/environments/environment';
+import { AirdropComponent } from '../airdrop/airdrop.component';
 import { BuyTokenComponent } from '../buy-token/buy-token.component';
 import { MessageModalComponent } from '../modal/message.modal.component';
 import { RegisterModalComponent } from '../register-modal/register-modal.component';
@@ -19,12 +21,18 @@ export class HeaderNavComponent implements OnInit {
   isLogin: boolean = false;
   toggleCollapseNavBar = false;
   userData: any;
-  approvalAmount = 10;
+  approvalAmount = 100;
+  deployerStatus: boolean = false;
 
   constructor(private snackBar: MatSnackBar, private etheriumService: EtheriumService, private dataService: DataService, private firebaseService: FirebaseService, private dialog: MatDialog) { }
 
   ngOnInit(): void {
-    this.etheriumService.connectMetaMask()
+    this.etheriumService.connectMetaMask().then((data) => {
+      console.log(data[0], environment.deployer, data[0] == environment.deployer)
+      if ((data[0]).toLowerCase() == environment.deployer.toLowerCase()) {
+        this.deployerStatus = true
+      }
+    })
     this.dataService.getUserData().subscribe((res: any) => {
       this.isLogin = false
       this.userData = null
@@ -66,7 +74,6 @@ export class HeaderNavComponent implements OnInit {
 
   async login() {
     const etherdata = await this.etheriumService.connectMetaMask();
-    console.log(etherdata[0])
     const docSnap = this.firebaseService.checkUserExists(etherdata[0])
     docSnap.subscribe(res => {
       const data = res.docs.map((docs: any) => {
@@ -181,6 +188,20 @@ export class HeaderNavComponent implements OnInit {
         width: '300px',
         height: '150px'
       })
+    })
+  }
+
+  airdrop() {
+    this.dialog.open(AirdropComponent, {
+      width: '550px',
+      height: '450px'
+    }).afterClosed().subscribe((res) => {
+      debugger
+      if (res.event == 'send') {
+        this.etheriumService.airdropAmount(res.data.address, res.data.amount.toString(), this.userData[0].user_wallet).then((res: any) => {
+          this.snackBarMessage("Air Drop Successfull")
+        })
+      }
     })
   }
 

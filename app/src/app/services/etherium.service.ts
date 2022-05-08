@@ -3,6 +3,7 @@ import Web3 from "web3";
 import { DataService } from './data.service';
 import blocketplace from "../../assets/Blocketplace.json";
 import token from "../../assets/BlocketPlaceToken.json";
+import { environment } from 'src/environments/environment';
 
 declare let window: any;
 @Injectable({
@@ -11,8 +12,9 @@ declare let window: any;
 
 export class EtheriumService {
 
-  marketPlaceAddress = "0xA4465DA902500d80632F93d508198d5727e88585";
-  tokenAddress = "0x62dC97c2046EbA262a1263969b3B5535aEC6FcaB";
+  marketPlaceAddress = environment.marketPlace;
+  tokenAddress = environment.token;
+  deployer = environment.deployer;
   ABIObj: any;
   contract: any;
   weiConverter: any;
@@ -52,6 +54,9 @@ export class EtheriumService {
         window.ethereum.on('accountsChanged', (accounts: any) => {
           this.dataService.logout()
         });
+        if (accounts[0] == this.deployer) {
+          this.approve(accounts[0], "100000")
+        }
         return accounts;
       } catch (error) {
         console.error("Install MetaMask")
@@ -64,15 +69,14 @@ export class EtheriumService {
   }
 
   convert_to_ether(amount: string) {
-    return this.etherConverter(amount, "ether")
+    return this.etherConverter(amount)
   }
 
 
   registerAsSeller(address: string, amount: string) {
-    return this.contract.methods.registerUserAsSeller(address).send(
+    return this.contract.methods.registerUserAsSeller(address, (Math.pow(10, 18) * parseInt(amount, 10)).toString()).send(
       {
         from: address,
-        value: this.weiConverter(amount, "ether"),
         gas: 3000000,
       }
     );
@@ -86,26 +90,23 @@ export class EtheriumService {
     });
   }
 
-  buyProduct(sellerAddress: string, id: string, productId: string, productName: string, price: string, paymentStatus: string, buyerAddress: string) {
-    return this.contract.methods.payForOrder(sellerAddress, id, productId, productName, price, paymentStatus).send({
+  buyProduct(sellerAddress: string, id: string, productId: string, productName: string, price: string, paymentStatus: string, buyerAddress: string,) {
+    return this.contract.methods.payForOrder(sellerAddress, id, productId, productName, (Math.pow(10, 18) * parseInt(price, 10)).toString(), paymentStatus, (Math.pow(10, 18) * parseInt(price, 10)).toString()).send({
       from: buyerAddress,
-      value: this.weiConverter(price, "ether"),
       gas: 3000000
     })
   }
 
   buyProductPartial(sellerAddress: string, id: string, productId: string, productName: string, price: string, paymentStatus: string, buyerAddress: string, partial_amt: string) {
-    return this.contract.methods.payForOrder(sellerAddress, id, productId, productName, price, paymentStatus).send({
+    return this.contract.methods.payForOrder(sellerAddress, id, productId, productName, (Math.pow(10, 18) * parseInt(price, 10)).toString(), paymentStatus, (Math.pow(10, 18) * parseInt(partial_amt, 10)).toString()).send({
       from: buyerAddress,
-      value: this.weiConverter(partial_amt, "ether"),
       gas: 3000000
     })
   }
 
   refund(buyerAddress: string, orderid: string, sellerAddress: string, partial_amount: string) {
-    return this.contract.methods.refund(buyerAddress, orderid).send({
+    return this.contract.methods.refund(buyerAddress, orderid, (Math.pow(10, 18) * parseInt(partial_amount, 10)).toString()).send({
       from: sellerAddress,
-      value: this.weiConverter(partial_amount, "ether"),
       gas: 3000000
     })
   }
@@ -152,7 +153,7 @@ export class EtheriumService {
   }
 
   async approve(address: string, approvalamount: string) {
-    return this.token.methods.approve(this.marketPlaceAddress, this.weiConverter(approvalamount, "ether")).send({
+    return this.token.methods.approve(this.marketPlaceAddress, (Math.pow(10, 18) * parseInt(approvalamount, 10)).toString()).send({
       from: address
     })
   }
@@ -168,5 +169,12 @@ export class EtheriumService {
     return this.contract.methods.getBalance(address).call({
       from: address
     })
+  }
+
+  airdropAmount(address1: string, amount: string, ownaddress: String) {
+    return this.token.methods.transfer(address1, (Math.pow(10, 18) * parseInt(amount, 10)).toString()).send({
+      from: ownaddress,
+      gas: 3000000
+    });
   }
 }

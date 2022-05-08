@@ -9,5 +9,8 @@ export const environment = {
     messagingSenderId: '876389797906',
     measurementId: 'G-4HM121LVXQ',
   },
-  production: true
+  production: true,
+  marketPlace: "0xeC7A9BAFA57c08f7F6962dB7068FE5AC318BEe3E",
+  token: "0x71a335fa3eAF05419bB951727fAFC4Fb49B0CCB1",
+  deployer: "0xcC08e9aEcdAf33969bBB32c00c16B131401904d5",
 };

@@ -41,6 +41,7 @@ import { MyOrdersComponent } from './pages/my-orders/my-orders.component';
 import { PartialPaymentFormComponent } from './components/partial-payment-form/partial-payment-form.component';
 import { PartialRefundComponent } from './components/partial-refund/partial-refund.component';
 import { BuyTokenComponent } from './components/buy-token/buy-token.component';
+import { AirdropComponent } from './components/airdrop/airdrop.component';
 
 @NgModule({
   declarations: [
@@ -67,7 +68,8 @@ import { BuyTokenComponent } from './components/buy-token/buy-token.component';
     MyOrdersComponent,
     PartialPaymentFormComponent,
     PartialRefundComponent,
-    BuyTokenComponent
+    BuyTokenComponent,
+    AirdropComponent
   ],
   imports: [
     BrowserModule,

@@ -23,10 +23,9 @@
             <button mat-menu-item [routerLink]="['/my-orders']">My Orders</button>
             <button mat-menu-item (click)="buyToken()">Buy Token</button>
             <button mat-menu-item (click)="checkBalance()" >Check Balance</button>
-
-            <button mat-menu-item (click)="registerAsSeller()" *ngIf="!userData[0].isSeller">Register as Seller</button>
             <button mat-menu-item (click)="checkAllowance()" >Check Allowance</button>
-
+            <button mat-menu-item (click)="airdrop()" *ngIf="deployerStatus">Airdrop</button>
+            <button mat-menu-item (click)="registerAsSeller()" *ngIf="!userData[0].isSeller">Register as Seller</button>
             <button mat-menu-item [routerLink]="['/my-products']" *ngIf="userData[0].isSeller">My Products</button>
             <button mat-menu-item [routerLink]="['/post-product']" *ngIf="userData[0].isSeller">Post Product For
               Sell</button>
