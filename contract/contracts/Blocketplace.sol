@@ -2,7 +2,7 @@
 
 pragma solidity >=0.4.22 <0.9.0;
 
-import "../node_modules/@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract Blocketplace {
     enum PaymentStatus {
@@ -61,33 +61,50 @@ contract Blocketplace {
     }
 
     event BoughtTokens(uint256 amount);
-    event PaymentDone(address payer, uint256 amount, PaymentStatus paymentStatus);
-    event PaymentDone(address payer, uint256 amount, string orderId, PaymentStatus paymentStatus);
+    event PaymentDone(
+        address payer,
+        uint256 amount,
+        PaymentStatus paymentStatus
+    );
+    event PaymentDone(
+        address payer,
+        uint256 amount,
+        string orderId,
+        PaymentStatus paymentStatus
+    );
 
     function registerUser(address addr) public userNotRegistered(addr) {
         members[addr] = true;
         accounts[addr].balance = 0;
     }
 
-    function registerUserAsSeller(string memory memberName) public payable {
+    function registerUserAsSeller(
+        string memory memberName,
+        uint256 depositAmount
+    ) public {
         require(members[msg.sender], "User not registered");
         require(
-            msg.value >= 0.001 ether,
+            depositAmount >= 0.01 ether,
             "Deposit money should be atleast 0.1 Ether"
         );
 
         address senderAddress = msg.sender;
         accounts[senderAddress].isSeller = true;
         accounts[senderAddress].name = memberName;
-        accounts[senderAddress].bankGuarantee = msg.value;
-        bkt.transferFrom(msg.sender, deployer, msg.value);
+        accounts[senderAddress].bankGuarantee = depositAmount;
+        bkt.transferFrom(msg.sender, deployer, depositAmount);
     }
 
     function isUserSeller() public view returns (bool) {
         return accounts[msg.sender].isSeller;
     }
 
-    function getSellerBalance() public view isSeller(msg.sender) returns (uint256) {
+    function getSellerBalance()
+        public
+        view
+        isSeller(msg.sender)
+        returns (uint256)
+    {
         return accounts[msg.sender].balance;
     }
 
@@ -95,11 +112,15 @@ contract Blocketplace {
         return bkt.balanceOf(msg.sender);
     }
 
-    function getOrderStatus(string memory orderId) public view returns (PaymentStatus) {
+    function getOrderStatus(string memory orderId)
+        public
+        view
+        returns (PaymentStatus)
+    {
         return ordersPlaced[orderId].paymentStatus;
-    } 
+    }
 
-    function buy() payable public {
+    function buy() public payable {
         uint256 amountToBuy = msg.value;
         uint256 bktBalance = bkt.balanceOf(deployer);
         require(amountToBuy > 0, "Send some ether");
@@ -108,7 +129,7 @@ contract Blocketplace {
         emit BoughtTokens(amountToBuy);
     }
 
-    function withdrawBalance() public payable isSeller(msg.sender) {
+    function withdrawBalance() public isSeller(msg.sender) {
         uint256 bal = accounts[msg.sender].balance;
         require(bal > 0, "Balance must be greater than zero");
 
@@ -118,7 +139,7 @@ contract Blocketplace {
         emit PaymentDone(msg.sender, bal, PaymentStatus.WITHDRAW);
     }
 
-    function unregisterUser(address payable userAddress) public payable onlyOwner {
+    function unregisterUser(address payable userAddress) public onlyOwner {
         require(members[userAddress], "User not registered");
 
         members[userAddress] = false;
@@ -128,7 +149,7 @@ contract Blocketplace {
 
         uint256 amountToBePaid = bankG + bal;
 
-        bkt.transfer(userAddress, amountToBePaid);
+        bkt.transferFrom(deployer, userAddress, amountToBePaid);
 
         accounts[userAddress].isSeller = false;
         accounts[userAddress].bankGuarantee = 0;
@@ -137,15 +158,19 @@ contract Blocketplace {
         emit PaymentDone(userAddress, amountToBePaid, PaymentStatus.WITHDRAW);
     }
 
-    function getBalance(address addr) public view returns(uint256) {
+    function getBalance(address addr) public view returns (uint256) {
         return bkt.balanceOf(addr);
     }
 
-    function getBalanceSC() public view returns(uint256) {
+    function getBalanceSC() public view returns (uint256) {
         return bkt.balanceOf(address(this));
     }
 
-    function getAllowance(address addr1, address addr2) public view returns(uint256) {
+    function getAllowance(address addr1, address addr2)
+        public
+        view
+        returns (uint256)
+    {
         return bkt.allowance(addr1, addr2);
     }
 
@@ -155,8 +180,9 @@ contract Blocketplace {
         string memory productId,
         string memory productName,
         uint256 productPrice,
-        uint256 paymentStatus
-    ) public payable isSeller(sellerAddr) {
+        uint256 paymentStatus,
+        uint256 amountPaying
+    ) public isSeller(sellerAddr) {
         if (paymentStatus == 1) {
             payAmountForOrder(
                 sellerAddr,
@@ -164,7 +190,8 @@ contract Blocketplace {
                 productId,
                 productName,
                 productPrice,
-                PaymentStatus.PARTIAL
+                PaymentStatus.PARTIAL,
+                amountPaying
             );
         } else {
             payAmountForOrder(
@@ -173,7 +200,8 @@ contract Blocketplace {
                 productId,
                 productName,
                 productPrice,
-                PaymentStatus.DONE
+                PaymentStatus.DONE,
+                amountPaying
             );
         }
     }
@@ -184,17 +212,26 @@ contract Blocketplace {
         string memory productId,
         string memory productName,
         uint256 productPrice,
-        PaymentStatus paymentStatus
-    ) public payable isSeller(sellerAddr) {
+        PaymentStatus paymentStatus,
+        uint256 amountPaying
+    ) public isSeller(sellerAddr) {
         uint256 allowance = bkt.allowance(msg.sender, address(this));
-        uint256 amountPaying = msg.value;
 
         require(members[msg.sender], "User not registered");
         require(productPrice > 0, "Product Price must be greater than 0");
-        require(allowance >= amountPaying, "Allowance must be equal to Amount Paying");
-        require(allowance >= productPrice, "Allowance must be equal to Product Price");
+        require(
+            allowance >= amountPaying,
+            "Allowance must be equal to Amount Paying"
+        );
+        require(
+            allowance >= productPrice,
+            "Allowance must be equal to Product Price"
+        );
         if (paymentStatus == PaymentStatus.DONE) {
-            require(amountPaying == productPrice, "Amount must be equal to Product Price");
+            require(
+                amountPaying == productPrice,
+                "Amount must be equal to Product Price"
+            );
         }
 
         uint256 scCut = amountPaying / 10;
@@ -220,10 +257,17 @@ contract Blocketplace {
             ordersPlaced[orderId].paymentStatus = PaymentStatus.DONE;
         }
 
-        emit PaymentDone(sellerAddr, ordersPlaced[orderId].amountPaid, orderId, ordersPlaced[orderId].paymentStatus);
+        emit PaymentDone(
+            sellerAddr,
+            ordersPlaced[orderId].amountPaid,
+            orderId,
+            ordersPlaced[orderId].paymentStatus
+        );
     }
 
-    function refund(string memory orderId, address payable buyerAddress) public payable {
+    function refund(string memory orderId, address payable buyerAddress)
+        public
+    {
         require(msg.sender == ordersPlaced[orderId].seller, "Seller Invalid");
         require(
             ordersPlaced[orderId].amountPaid > 0,
@@ -236,11 +280,11 @@ contract Blocketplace {
         if (ordersPlaced[orderId].paymentStatus == PaymentStatus.PARTIAL) {
             amountToSend = (amount / 100) * 90;
         }
-        
+
         uint256 allowance = bkt.allowance(msg.sender, address(this));
         require(
-            allowance <= amountToSend,
-            "Value must be equal to Send to Customer"
+            allowance >= amountToSend,
+            "Allowance must be equal to Send to Customer"
         );
 
         bkt.transferFrom(msg.sender, buyerAddress, amountToSend);
