@@ -38,7 +38,7 @@ module.exports = {
   networks: {
     development: {
       host: "127.0.0.1",
-      port: 8545,
+      port: 7545,
       network_id: "*",
     },
     // Useful for testing. The `development` name is special - truffle uses it by default
@@ -91,7 +91,7 @@ module.exports = {
   // Configure your compilers
   compilers: {
     solc: {
-      version: "0.6.12",
+      version: "0.8.0",
       docker: false,
     },
   },

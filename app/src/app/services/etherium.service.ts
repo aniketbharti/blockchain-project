@@ -46,7 +46,6 @@ export class EtheriumService {
         await ethereum.request({ method: "eth_requestAccounts" });
         const accounts = await ethereum.request({ method: "eth_accounts" });
         window.ethereum.on('accountsChanged', (accounts: any) => {
-          console.log("hi")
           this.dataService.logout()
         });
         return accounts;

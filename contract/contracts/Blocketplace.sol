@@ -2,11 +2,14 @@
 
 pragma solidity >=0.4.22 <0.9.0;
 
+import "../node_modules/@openzeppelin/contracts/token/ERC20/ERC20.sol";
+
 contract Blocketplace {
     enum PaymentStatus {
         PARTIAL,
         DONE,
-        REFUNDED
+        REFUNDED,
+        WITHDRAW
     }
 
     struct Order {
@@ -30,15 +33,20 @@ contract Blocketplace {
     mapping(address => Account) accounts;
     mapping(string => Order) ordersPlaced;
 
-    address owner;
+    address payable deployer;
     uint256 balance;
+    address blocketPlaceAddr;
 
-    constructor() public payable {
-        owner = msg.sender;
+    IERC20 public bkt;
+
+    constructor(address bktAddress) payable {
+        deployer = payable(msg.sender);
+        bkt = IERC20(bktAddress);
+        blocketPlaceAddr = bktAddress;
     }
 
     modifier onlyOwner() {
-        require(msg.sender == owner, "Not the owner");
+        require(msg.sender == deployer, "Not the owner");
         _;
     }
 
@@ -52,6 +60,10 @@ contract Blocketplace {
         _;
     }
 
+    event BoughtTokens(uint256 amount);
+    event PaymentDone(address payer, uint256 amount, PaymentStatus paymentStatus);
+    event PaymentDone(address payer, uint256 amount, string orderId, PaymentStatus paymentStatus);
+
     function registerUser(address addr) public userNotRegistered(addr) {
         members[addr] = true;
         accounts[addr].balance = 0;
@@ -60,7 +72,7 @@ contract Blocketplace {
     function registerUserAsSeller(string memory memberName) public payable {
         require(members[msg.sender], "User not registered");
         require(
-            msg.value >= 0.1 ether,
+            msg.value >= 0.001 ether,
             "Deposit money should be atleast 0.1 Ether"
         );
 
@@ -68,52 +80,73 @@ contract Blocketplace {
         accounts[senderAddress].isSeller = true;
         accounts[senderAddress].name = memberName;
         accounts[senderAddress].bankGuarantee = msg.value;
+        bkt.transferFrom(msg.sender, deployer, msg.value);
     }
 
     function isUserSeller() public view returns (bool) {
         return accounts[msg.sender].isSeller;
     }
 
-    function getSellerBalance()
-        public
-        view
-        isSeller(msg.sender)
-        returns (uint256)
-    {
+    function getSellerBalance() public view isSeller(msg.sender) returns (uint256) {
         return accounts[msg.sender].balance;
     }
 
-    function getOrderStatus(string memory orderId)
-        public
-        view
-        returns (PaymentStatus)
-    {
+    function getSomethingBalance() public view returns (uint256) {
+        return bkt.balanceOf(msg.sender);
+    }
+
+    function getOrderStatus(string memory orderId) public view returns (PaymentStatus) {
         return ordersPlaced[orderId].paymentStatus;
+    } 
+
+    function buy() payable public {
+        uint256 amountToBuy = msg.value;
+        uint256 bktBalance = bkt.balanceOf(deployer);
+        require(amountToBuy > 0, "Send some ether");
+        require(amountToBuy <= bktBalance, "Not enough tokens");
+        bkt.transferFrom(deployer, msg.sender, amountToBuy);
+        emit BoughtTokens(amountToBuy);
     }
 
     function withdrawBalance() public payable isSeller(msg.sender) {
         uint256 bal = accounts[msg.sender].balance;
         require(bal > 0, "Balance must be greater than zero");
-        msg.sender.transfer(bal);
+
+        bkt.transferFrom(deployer, msg.sender, bal);
+
         accounts[msg.sender].balance = 0;
+        emit PaymentDone(msg.sender, bal, PaymentStatus.WITHDRAW);
     }
 
-    function unregisterUser(address payable userAddress)
-        public
-        payable
-        onlyOwner
-    {
+    function unregisterUser(address payable userAddress) public payable onlyOwner {
         require(members[userAddress], "User not registered");
 
         members[userAddress] = false;
 
         uint256 bankG = accounts[userAddress].bankGuarantee;
         uint256 bal = accounts[userAddress].balance;
-        userAddress.transfer(bankG + bal);
+
+        uint256 amountToBePaid = bankG + bal;
+
+        bkt.transfer(userAddress, amountToBePaid);
 
         accounts[userAddress].isSeller = false;
         accounts[userAddress].bankGuarantee = 0;
         accounts[userAddress].balance = 0;
+
+        emit PaymentDone(userAddress, amountToBePaid, PaymentStatus.WITHDRAW);
+    }
+
+    function getBalance(address addr) public view returns(uint256) {
+        return bkt.balanceOf(addr);
+    }
+
+    function getBalanceSC() public view returns(uint256) {
+        return bkt.balanceOf(address(this));
+    }
+
+    function getAllowance(address addr1, address addr2) public view returns(uint256) {
+        return bkt.allowance(addr1, addr2);
     }
 
     function payForOrder(
@@ -153,31 +186,32 @@ contract Blocketplace {
         uint256 productPrice,
         PaymentStatus paymentStatus
     ) public payable isSeller(sellerAddr) {
-        uint256 amount = msg.value;
+        uint256 allowance = bkt.allowance(msg.sender, address(this));
+        uint256 amountPaying = msg.value;
 
         require(members[msg.sender], "User not registered");
         require(productPrice > 0, "Product Price must be greater than 0");
+        require(allowance >= amountPaying, "Allowance must be equal to Amount Paying");
+        require(allowance >= productPrice, "Allowance must be equal to Product Price");
         if (paymentStatus == PaymentStatus.DONE) {
-            require(
-                productPrice == amount,
-                "Value must be equal to Product Price"
-            );
+            require(amountPaying == productPrice, "Amount must be equal to Product Price");
         }
 
-        uint256 scCut = amount / 10;
+        uint256 scCut = amountPaying / 10;
         accounts[sellerAddr].balance += scCut * 9;
         balance += scCut;
-        //sellerAddr.transfer(scCut * 9);
-        // accounts[msg.sender].balance -= amount;
+
+        //bkt.transferFrom(msg.sender, sellerAddr, scCut * 9);
+        bkt.transferFrom(msg.sender, deployer, amountPaying);
 
         ordersPlaced[orderId].product_id = productId;
         ordersPlaced[orderId].name = productName;
         ordersPlaced[orderId].seller = sellerAddr;
         ordersPlaced[orderId].buyer = payable(msg.sender);
         if (paymentStatus == PaymentStatus.PARTIAL) {
-            ordersPlaced[orderId].amountPaid += amount;
+            ordersPlaced[orderId].amountPaid += amountPaying;
         } else {
-            ordersPlaced[orderId].amountPaid = amount;
+            ordersPlaced[orderId].amountPaid = amountPaying;
         }
         ordersPlaced[orderId].price = productPrice;
 
@@ -185,12 +219,11 @@ contract Blocketplace {
         if (ordersPlaced[orderId].amountPaid >= productPrice) {
             ordersPlaced[orderId].paymentStatus = PaymentStatus.DONE;
         }
+
+        emit PaymentDone(sellerAddr, ordersPlaced[orderId].amountPaid, orderId, ordersPlaced[orderId].paymentStatus);
     }
 
-    function refund(string memory orderId, address payable buyerAddress)
-        public
-        payable
-    {
+    function refund(string memory orderId, address payable buyerAddress) public payable {
         require(msg.sender == ordersPlaced[orderId].seller, "Seller Invalid");
         require(
             ordersPlaced[orderId].amountPaid > 0,
@@ -203,15 +236,18 @@ contract Blocketplace {
         if (ordersPlaced[orderId].paymentStatus == PaymentStatus.PARTIAL) {
             amountToSend = (amount / 100) * 90;
         }
-
+        
+        uint256 allowance = bkt.allowance(msg.sender, address(this));
         require(
-            msg.value == amountToSend,
+            allowance <= amountToSend,
             "Value must be equal to Send to Customer"
         );
 
-        buyerAddress.transfer(amountToSend);
-        accounts[msg.sender].balance -= amountToSend;
+        bkt.transferFrom(msg.sender, buyerAddress, amountToSend);
 
+        accounts[msg.sender].balance -= amountToSend;
         ordersPlaced[orderId].paymentStatus = PaymentStatus.REFUNDED;
+
+        emit PaymentDone(buyerAddress, amountToSend, PaymentStatus.REFUNDED);
     }
 }
