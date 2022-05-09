@@ -14,9 +14,14 @@ export const environment = {
     measurementId: 'G-4HM121LVXQ',
   },
   production: false,
-  marketPlace: "0xbC75B43604bAFFf741351CC89592319FC64b2099",
-  token: "0x3427c48F81f84c839B84618A06F9DD8f7b4EAE03",
-  deployer: "0x9379973c5E5FcC479D91D0EecBE9870859E7E889",
+  marketPlace: "0x4E36acef9148Ed114ba06Dd1E13585cc2cDAC7b5",
+  token: "0xFE4712047059F6ABF793e454CB39073D640146A2",
+  deployer: "0x2F5a22757861BdB6f818aC6DA336c3eC57B2E7AE",
+
+    // For Ropstean please use this addresses
+  // marketPlace: "0xbC75B43604bAFFf741351CC89592319FC64b2099",
+  // token: "0x3427c48F81f84c839B84618A06F9DD8f7b4EAE03",
+  // deployer: "0x9379973c5E5FcC479D91D0EecBE9870859E7E889"
 };
 
 /*
