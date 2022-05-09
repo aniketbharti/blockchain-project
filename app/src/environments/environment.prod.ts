@@ -10,7 +10,7 @@ export const environment = {
     measurementId: 'G-4HM121LVXQ',
   },
   production: true,
-  marketPlace: "0xea3eCC540c0Fd6325bdCA71A7b4E46a579380Bfd",
-  token: "0x9989aF3D047dfd2752334bBE1b30aeb23e839F4c",
-  deployer: "0x8cf0d4f918be1Eb137146211A2183D3b3AF12449",
+  marketPlace: "0xbC75B43604bAFFf741351CC89592319FC64b2099",
+  token: "0x3427c48F81f84c839B84618A06F9DD8f7b4EAE03",
+  deployer: "0x9379973c5E5FcC479D91D0EecBE9870859E7E889",
 };
