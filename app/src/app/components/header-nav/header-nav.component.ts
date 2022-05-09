@@ -121,7 +121,7 @@ export class HeaderNavComponent implements OnInit {
   registerAsSeller() {
     this.dialog.open(MessageModalComponent, {
       data: {
-        message: ['Are You Sure?', 'In order to register as seller you need 0.5 Ether'],
+        message: ['Are You Sure?', 'In order to register as seller you need 0.5 BKT'],
         button: ["Ok", "Cancel"]
       }
     }).afterClosed().subscribe((res) => {

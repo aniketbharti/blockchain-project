@@ -95,7 +95,7 @@ export class MyOrdersComponent implements OnInit {
   }
 
   buyPartial(sellerAddress: string, id: string, productId: string, productName: string, price: string, paymentStatus: string, buyerAddress: string, partial: string) {
-    return this.etheriumService.buyProductPartial(sellerAddress, id, productId, productName, price, paymentStatus, buyerAddress, partial)
+    return this.etheriumService.buyProductPartial(sellerAddress, id, productId, productName, price.toString(), paymentStatus, buyerAddress, partial)
   }
 
   snackBarMessage(message: string, action = '') {

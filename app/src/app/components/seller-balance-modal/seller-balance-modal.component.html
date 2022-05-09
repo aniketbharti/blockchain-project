@@ -13,7 +13,7 @@
   <div class="container-div">
     <form [formGroup]="sellerBalanceForm">
       <div class="form-group">
-        <label for="formGroupExampleInput2">Seller Balance (in Ether)<span class="text-danger">*</span></label>
+        <label for="formGroupExampleInput2">Seller Balance (in BKT)<span class="text-danger">*</span></label>
         <input type="text" class="form-control" formControlName="seller_wallet" id="formGroupExampleInput2"
           placeholder="Seller Balance">
         <div *ngIf="!f.seller_wallet?.valid && (f.seller_wallet?.dirty ||f.seller_wallet?.touched)">

@@ -47,6 +47,7 @@ export class EtheriumService {
 
   async connectMetaMask() {
     let ethereum = window?.ethereum;
+    const amt = 100
     if (typeof window?.ethereum !== "undefined") {
       try {
         await ethereum.request({ method: "eth_requestAccounts" });
@@ -54,9 +55,9 @@ export class EtheriumService {
         window.ethereum.on('accountsChanged', (accounts: any) => {
           this.dataService.logout()
         });
-        if (accounts[0] == this.deployer) {
-          this.approve(accounts[0], "100000")
-        }
+        // if ((accounts[0]).toString().toLowerCase() == (this.deployer).toString().toLowerCase()) {
+        //   this.approve(accounts[0], amt.toString())
+        // }
         return accounts;
       } catch (error) {
         console.error("Install MetaMask")
@@ -74,7 +75,7 @@ export class EtheriumService {
 
 
   registerAsSeller(address: string, amount: string) {
-    return this.contract.methods.registerUserAsSeller(address, (Math.pow(10, 18) * parseInt(amount, 10)).toString()).send(
+    return this.contract.methods.registerUserAsSeller(address, this.weiConverter(amount, "ether")).send(
       {
         from: address,
         gas: 3000000,
@@ -91,21 +92,21 @@ export class EtheriumService {
   }
 
   buyProduct(sellerAddress: string, id: string, productId: string, productName: string, price: string, paymentStatus: string, buyerAddress: string,) {
-    return this.contract.methods.payForOrder(sellerAddress, id, productId, productName, (Math.pow(10, 18) * parseInt(price, 10)).toString(), paymentStatus, (Math.pow(10, 18) * parseInt(price, 10)).toString()).send({
+    return this.contract.methods.payForOrder(sellerAddress, id, productId, productName, this.weiConverter(price, "ether"), paymentStatus, this.weiConverter(price, "ether")).send({
       from: buyerAddress,
       gas: 3000000
     })
   }
 
   buyProductPartial(sellerAddress: string, id: string, productId: string, productName: string, price: string, paymentStatus: string, buyerAddress: string, partial_amt: string) {
-    return this.contract.methods.payForOrder(sellerAddress, id, productId, productName, (Math.pow(10, 18) * parseInt(price, 10)).toString(), paymentStatus, (Math.pow(10, 18) * parseInt(partial_amt, 10)).toString()).send({
+    return this.contract.methods.payForOrder(sellerAddress, id, productId, productName,  this.weiConverter(price, "ether"), paymentStatus, this.weiConverter(partial_amt, "ether")).send({
       from: buyerAddress,
       gas: 3000000
     })
   }
 
   refund(buyerAddress: string, orderid: string, sellerAddress: string, partial_amount: string) {
-    return this.contract.methods.refund(buyerAddress, orderid, (Math.pow(10, 18) * parseInt(partial_amount, 10)).toString()).send({
+    return this.contract.methods.refund(buyerAddress, orderid).send({
       from: sellerAddress,
       gas: 3000000
     })
@@ -153,7 +154,7 @@ export class EtheriumService {
   }
 
   async approve(address: string, approvalamount: string) {
-    return this.token.methods.approve(this.marketPlaceAddress, (Math.pow(10, 18) * parseInt(approvalamount, 10)).toString()).send({
+    return this.token.methods.approve(this.marketPlaceAddress, this.weiConverter(approvalamount, 'ether') ).send({
       from: address
     })
   }
@@ -172,7 +173,7 @@ export class EtheriumService {
   }
 
   airdropAmount(address1: string, amount: string, ownaddress: String) {
-    return this.token.methods.transfer(address1, (Math.pow(10, 18) * parseInt(amount, 10)).toString()).send({
+    return this.token.methods.transfer(address1, this.weiConverter(amount, "ether")).send({
       from: ownaddress,
       gas: 3000000
     });
